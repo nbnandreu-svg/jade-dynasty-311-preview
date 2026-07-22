@@ -25,9 +25,36 @@ const features = [
   { symbol: "盟", title: "Сражаться вместе" },
 ];
 
+const adventureItems = [
+  {
+    title: "Небесные путешествия",
+    image: "/adventures/01-sky-travel.webp",
+    alt: "Воздушный корабль над небесными землями",
+  },
+  {
+    title: "Торговля и ремёсла",
+    image: "/adventures/02-trade-craft.webp",
+    alt: "Торговая улица восточного города",
+  },
+  {
+    title: "Эпические битвы",
+    image: "/adventures/03-epic-battles.webp",
+    alt: "Сражение героев с магическими умениями",
+  },
+  {
+    title: "Исследование мира",
+    image: "/adventures/04-world-exploration.webp",
+    alt: "Небесный храм среди гор и водопадов",
+  },
+  {
+    title: "Праздники и события",
+    image: "/adventures/05-festivals-events.webp",
+    alt: "Праздник с фонарями и фейерверками",
+  },
+];
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showAllClasses, setShowAllClasses] = useState(false);
   const [videoNote, setVideoNote] = useState(false);
 
   return (
@@ -58,7 +85,7 @@ export default function Home() {
         </a>
       </header>
 
-      <section className="hero" id="top">
+      <section className="hero" id="top" aria-label="Jade Dynasty — Навстречу небесам">
         <a className="hero-start-hotspot" href="#start" aria-label="Начать путь в Jade Dynasty" />
         <div className="cloud-divider" aria-hidden="true" />
       </section>
@@ -71,6 +98,22 @@ export default function Home() {
       )}
 
       <div className="parchment-content">
+        <section className="adventure-strip section-wrap" aria-labelledby="adventure-title">
+          <h2 className="adventure-heading" id="adventure-title">
+            <i /><b>◇</b><span>Мир приключений</span><b>◇</b><i />
+          </h2>
+          <div className="adventure-list">
+            {adventureItems.map((item) => (
+              <article className="adventure-card" key={item.image}>
+                <div className="adventure-art">
+                  <Image src={item.image} alt={item.alt} fill sizes="205px" />
+                </div>
+                <strong>{item.title}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="intro-grid section-wrap" aria-label="Знакомство с игрой и сервером">
           <article className="ornate-panel about-panel" id="about">
             <SectionTitle symbol="閣">Об игре</SectionTitle>
@@ -118,9 +161,9 @@ export default function Home() {
 
         <section className="class-section section-wrap" id="classes">
           <OrnamentHeading>Выбери свой путь</OrnamentHeading>
-          <div className={showAllClasses ? "class-grid expanded" : "class-grid"}>
-            {classes.map((item, index) => (
-              <article className="class-card" key={item.slug} hidden={!showAllClasses && index > 3}>
+          <div className="class-grid">
+            {classes.map((item) => (
+              <article className="class-card" key={item.slug}>
                 <div className="class-image">
                   <Image src={`/classes/${item.slug}.webp`} alt={`Класс ${item.name}`} fill sizes="(max-width: 620px) 48vw, (max-width: 950px) 25vw, 260px" />
                 </div>
@@ -128,9 +171,6 @@ export default function Home() {
               </article>
             ))}
           </div>
-          <button className="all-classes" type="button" onClick={() => setShowAllClasses((value) => !value)}>
-            {showAllClasses ? "Скрыть дополнительные классы" : "Все 12 классов"} <span>{showAllClasses ? "↑" : "›"}</span>
-          </button>
         </section>
 
         <section className="lower-grid section-wrap" id="events">

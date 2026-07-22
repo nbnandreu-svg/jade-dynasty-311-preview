@@ -50,15 +50,26 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .cabinet-button:hover { transform: translateY(-1px); background: #fff7e2; }
 .menu-button { display: none; }
 
-.hero { position: relative; height: min(720px, 43vw); min-height: 610px; overflow: hidden; background: url('/hero-selected-reference.webp') center -54px / 100% auto no-repeat, #f5d8ae; }
-.hero-start-hotspot { position: absolute; z-index: 6; top: 43%; left: 57.4%; width: 19%; height: 9%; border-radius: 10px; }
+.hero { position: relative; height: min(650px, 39vw); min-height: 610px; overflow: hidden; background: url('/hero-selected-reference.webp') center -54px / 100% auto no-repeat, #f5d8ae; }
+.hero-start-hotspot { position: absolute; z-index: 6; top: 56%; left: 57.4%; width: 19%; height: 9%; border-radius: 10px; }
 .hero-start-hotspot:focus-visible { outline: 4px solid white; outline-offset: 2px; }
 .floating-note { position: fixed; z-index: 60; left: 50%; bottom: 28px; width: min(420px, calc(100% - 36px)); padding: 14px 42px 14px 18px; transform: translateX(-50%); border: 1px solid var(--gold-line); color: var(--muted); background: rgba(255,249,234,.97); box-shadow: 0 14px 40px rgba(61,43,16,.2); font-size: 12px; text-align: center; }
 .floating-note button { position: absolute; top: 5px; right: 10px; border: 0; background: none; cursor: pointer; font-size: 22px; }
 .cloud-divider { position: absolute; z-index: 4; left: -3%; right: -3%; bottom: -45px; height: 150px; background: radial-gradient(ellipse at 8% 55%, #fffaf0 0 28%, transparent 30%), radial-gradient(ellipse at 25% 65%, #fffaf0 0 34%, transparent 36%), radial-gradient(ellipse at 48% 55%, #fffaf0 0 31%, transparent 33%), radial-gradient(ellipse at 72% 65%, #fffaf0 0 34%, transparent 36%), radial-gradient(ellipse at 92% 55%, #fffaf0 0 29%, transparent 31%); }
 
-.parchment-content { position: relative; padding-top: 34px; background: radial-gradient(circle at 10% 8%, rgba(213,157,75,.11), transparent 24%), radial-gradient(circle at 93% 34%, rgba(66,151,157,.08), transparent 24%), repeating-linear-gradient(0deg, rgba(114,80,35,.018) 0 1px, transparent 1px 5px), var(--paper); }
+.parchment-content { position: relative; padding-top: 18px; background: radial-gradient(circle at 10% 8%, rgba(213,157,75,.11), transparent 24%), radial-gradient(circle at 93% 34%, rgba(66,151,157,.08), transparent 24%), repeating-linear-gradient(0deg, rgba(114,80,35,.018) 0 1px, transparent 1px 5px), var(--paper); }
 .section-wrap { width: min(1520px, calc(100% - 80px)); margin: 0 auto; }
+.adventure-strip { position: relative; z-index: 5; padding: 0 30px 58px; }
+.adventure-heading { display: grid; grid-template-columns: 1fr auto auto auto 1fr; align-items: center; gap: 16px; margin: 0 auto 25px; color: var(--ink); font-family: var(--serif); font-size: 27px; letter-spacing: .1em; text-align: center; text-transform: uppercase; }
+.adventure-heading i { height: 1px; background: linear-gradient(90deg, transparent, var(--gold-line)); }
+.adventure-heading i:last-child { transform: rotate(180deg); }
+.adventure-heading b { color: var(--gold); font-size: 11px; }
+.adventure-list { display: grid; grid-template-columns: repeat(5, 205px); justify-content: space-between; gap: 22px; }
+.adventure-card { position: relative; width: 205px; padding: 6px 6px 12px; border: 1px solid var(--gold-line); border-radius: 50% 50% 10px 10px / 68% 68% 10px 10px; background: rgba(255,249,234,.82); box-shadow: inset 0 0 0 4px rgba(255,255,255,.55), 0 8px 22px rgba(101,69,25,.09); }
+.adventure-card::before { content: ""; position: absolute; z-index: 3; inset: 10px 10px auto; height: 124px; border: 1px solid rgba(255,244,209,.72); border-radius: 50% 50% 4px 4px / 72% 72% 4px 4px; pointer-events: none; }
+.adventure-art { position: relative; width: 100%; aspect-ratio: 205 / 136; overflow: hidden; border-radius: 50% 50% 4px 4px / 72% 72% 4px 4px; background: #dce8dd; }
+.adventure-art img { object-fit: cover; }
+.adventure-card strong { position: relative; z-index: 4; min-height: 34px; display: grid; place-items: center; margin: -9px 5px 0; padding: 7px 6px 5px; border: 1px solid rgba(242,213,152,.7); color: #fff8df; background: var(--ink); font-family: var(--serif); font-size: 10px; letter-spacing: .04em; text-align: center; text-transform: uppercase; clip-path: polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%); }
 .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
 .ornate-panel { position: relative; padding: 26px; border: 1px solid var(--gold-line); background: rgba(255,250,239,.72); box-shadow: inset 0 0 0 5px rgba(255,255,255,.65), inset 0 0 0 6px rgba(180,126,53,.24); }
 .ornate-panel::before, .ornate-panel::after { content: "◇"; position: absolute; z-index: 2; color: var(--gold); font-size: 17px; line-height: 1; background: var(--paper); }
@@ -114,10 +125,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .class-card:nth-child(4n+2) .class-name span { background: #986126; }
 .class-card:nth-child(4n+3) .class-name span { background: #3267a7; }
 .class-card:nth-child(4n+4) .class-name span { background: #bd7625; }
-.all-classes { min-width: 330px; min-height: 46px; display: flex; align-items: center; justify-content: center; gap: 45px; margin: 27px auto 0; border: 1px solid var(--gold-line); cursor: pointer; color: var(--ink); background: var(--paper-light); font-family: var(--serif); font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; clip-path: polygon(7% 0,93% 0,100% 50%,93% 100%,7% 100%,0 50%); }
-.all-classes:hover { background: #fff1d6; }
-.all-classes span { font-size: 25px; line-height: 1; }
-
 .lower-grid { display: grid; grid-template-columns: 1fr 1.12fr 1fr; gap: 26px; padding-top: 62px; }
 .compact-panel { min-height: 400px; padding: 20px; }
 .compact-panel .section-title { font-size: 20px; }
@@ -162,11 +169,15 @@ footer small { color: var(--muted); font-size: 9px; letter-spacing: .09em; text-
   .topnav.open { display: flex; }
   .topnav a { padding: 14px 0; border-bottom: 1px solid rgba(180,126,53,.22); }
   .cabinet-button { display: none; }
+  .hero { height: 590px; min-height: 590px; background-size: auto 590px; background-position: 31% -20px; }
   .section-wrap { width: min(100% - 44px, 980px); }
+  .adventure-strip { width: calc(100% - 22px); padding-left: 11px; padding-right: 11px; }
+  .adventure-list { display: flex; justify-content: flex-start; gap: 20px; overflow-x: auto; padding: 4px 18px 17px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+  .adventure-card { flex: 0 0 205px; scroll-snap-align: start; }
   .intro-grid { grid-template-columns: 1fr; }
   .world-grid { grid-template-columns: 1fr; }
   .video-frame { min-height: 500px; }
-  .class-grid { gap: 16px; }
+  .class-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .class-image { height: 350px; }
   .lower-grid { grid-template-columns: 1fr 1fr; }
   .start-panel { grid-column: 1 / -1; }
@@ -177,6 +188,12 @@ footer small { color: var(--muted); font-size: 9px; letter-spacing: .09em; text-
   .hero-start-hotspot { display: none; }
   .cloud-divider { bottom: -63px; }
   .section-wrap { width: calc(100% - 28px); }
+  .adventure-strip { width: calc(100% - 20px); padding: 0 0 48px; }
+  .adventure-heading { gap: 7px; margin-bottom: 20px; font-size: 20px; }
+  .adventure-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; overflow: visible; padding: 0; }
+  .adventure-card { width: 100%; min-width: 0; }
+  .adventure-card:last-child { grid-column: 1 / -1; width: calc((100% - 13px) / 2); justify-self: center; }
+  .adventure-card::before { height: calc((100vw - 67px) * .51); max-height: 124px; }
   .ornate-panel { padding: 18px; }
   .world-picture { height: 245px; }
   .server-facts { grid-template-columns: 1fr; }
@@ -192,7 +209,6 @@ footer small { color: var(--muted); font-size: 9px; letter-spacing: .09em; text-
   .class-name { min-height: 87px; }
   .class-name strong { font-size: 16px; }
   .class-name span { width: 42px; height: 42px; font-size: 16px; }
-  .all-classes { min-width: 0; width: 90%; gap: 20px; font-size: 11px; }
   .lower-grid { grid-template-columns: 1fr; }
   .start-panel { grid-column: auto; }
   .cabinet-note { flex-direction: column; align-items: center; text-align: center; }

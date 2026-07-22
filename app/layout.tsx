@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "Jade Dynasty 3.1.1",
       description: "Восточная MMORPG о пути к бессмертию, великих сражениях и мире, который лучше открывать вместе.",
-      images: [{ url: imageUrl, width: 1728, height: 910, alt: "Jade Dynasty — версия 3.1.1" }],
+      images: [{ url: imageUrl, width: 1672, height: 941, alt: "Jade Dynasty — Навстречу небесам" }],
       locale: "ru_RU",
       type: "website",
     },
