@@ -1,243 +1,196 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const classes = [
-  { name: "Арден", slug: "arden" },
-  { name: "Вим", slug: "vim" },
-  { name: "Титан", slug: "titan" },
-  { name: "Ская", slug: "skaya" },
-  { name: "Хаккан", slug: "hakkan" },
-  { name: "Войда", slug: "voida" },
-  { name: "Айне", slug: "aine" },
-  { name: "Умбра", slug: "umbra" },
-  { name: "Тайо", slug: "tayo" },
-  { name: "Вайлин", slug: "vailin" },
-  { name: "Морто", slug: "morto" },
-  { name: "Ниру", slug: "niru" },
+  { name: "Арден", slug: "arden", seal: "弓" },
+  { name: "Вим", slug: "vim", seal: "武" },
+  { name: "Титан", slug: "titan", seal: "力" },
+  { name: "Ская", slug: "skaya", seal: "光" },
+  { name: "Хаккан", slug: "hakkan", seal: "刃" },
+  { name: "Войда", slug: "voida", seal: "影" },
+  { name: "Айне", slug: "aine", seal: "霜" },
+  { name: "Умбра", slug: "umbra", seal: "夜" },
+  { name: "Тайо", slug: "tayo", seal: "炎" },
+  { name: "Вайлин", slug: "vailin", seal: "音" },
+  { name: "Морто", slug: "morto", seal: "魂" },
+  { name: "Ниру", slug: "niru", seal: "星" },
 ];
 
-const worldFeatures = [
-  {
-    mark: "01",
-    title: "Путь бессмертия",
-    text: "Развивайте героя, осваивайте новые ступени силы и находите собственный путь в мире восточного фэнтези.",
-  },
-  {
-    mark: "02",
-    title: "Большой живой мир",
-    text: "Путешествуйте между городами и небесными землями, участвуйте в событиях и открывайте историю мира.",
-  },
-  {
-    mark: "03",
-    title: "Игра вместе",
-    text: "Объединяйтесь с другими игроками, создавайте гильдии и проходите испытания, рассчитанные на команду.",
-  },
+const features = [
+  { symbol: "山", title: "Исследовать мир" },
+  { symbol: "道", title: "Развивать героя" },
+  { symbol: "王", title: "Побеждать боссов" },
+  { symbol: "盟", title: "Сражаться вместе" },
 ];
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeClass, setActiveClass] = useState(0);
-
-  useEffect(() => {
-    const closeMenu = () => setMenuOpen(false);
-    window.addEventListener("hashchange", closeMenu);
-    return () => window.removeEventListener("hashchange", closeMenu);
-  }, []);
-
-  const selectedClass = classes[activeClass];
+  const [showAllClasses, setShowAllClasses] = useState(false);
+  const [videoNote, setVideoNote] = useState(false);
 
   return (
-    <main>
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label="Jade Dynasty — наверх">
-          <span className="brand-mark" aria-hidden="true">JD</span>
-          <span className="brand-copy">
-            <strong>Jade Dynasty</strong>
-            <small>версия 3.1.1</small>
-          </span>
-        </a>
+    <main className="page-shell">
+      <header className="topbar">
+        <a className="round-logo" href="#top" aria-label="Jade Dynasty — наверх">JD</a>
 
         <button
-          className="menu-toggle"
+          className="menu-button"
           type="button"
           aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
           aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((current) => !current)}
+          onClick={() => setMenuOpen((value) => !value)}
         >
-          <span />
-          <span />
+          <span /><span /><span />
         </button>
 
-        <nav className={menuOpen ? "main-nav is-open" : "main-nav"} aria-label="Основная навигация">
+        <nav className={menuOpen ? "topnav open" : "topnav"} aria-label="Основная навигация">
           <a href="#about" onClick={() => setMenuOpen(false)}>Об игре</a>
           <a href="#server" onClick={() => setMenuOpen(false)}>О сервере</a>
           <a href="#classes" onClick={() => setMenuOpen(false)}>Классы</a>
-          <a href="#start" onClick={() => setMenuOpen(false)}>Начать играть</a>
+          <a href="#events" onClick={() => setMenuOpen(false)}>События</a>
+          <a className="active" href="#start" onClick={() => setMenuOpen(false)}>Начать</a>
         </nav>
 
-        <a className="account-link" href="#account">Личный кабинет</a>
+        <a className="cabinet-button" href="#cabinet"><span>Личный кабинет</span></a>
       </header>
 
       <section className="hero" id="top">
-        <div className="hero-sun" aria-hidden="true" />
-        <div className="cloud cloud-one" aria-hidden="true" />
-        <div className="cloud cloud-two" aria-hidden="true" />
-
-        <div className="hero-copy">
-          <p className="eyebrow"><span /> Jade Dynasty 3.1.1</p>
-          <h1>Небеса ближе,<br /><em>чем кажется</em></h1>
-          <p className="hero-lead">
-            Восточная MMORPG о пути к бессмертию, великих сражениях и мире,
-            который лучше открывать вместе.
-          </p>
-          <div className="hero-actions">
-            <a className="button button-primary" href="#about">Открыть мир</a>
-            <a className="button button-quiet" href="#classes">Выбрать класс <span>→</span></a>
-          </div>
-          <dl className="hero-facts" aria-label="Основные параметры сервера">
-            <div><dt>3.1.1</dt><dd>версия</dd></div>
-            <div><dt>160 РБ</dt><dd>макс. уровень</dd></div>
-            <div><dt>2</dt><dd>расы</dd></div>
-            <div><dt>12</dt><dd>классов</dd></div>
-          </dl>
-        </div>
-
-        <div className="hero-art" aria-label="Персонаж Jade Dynasty">
-          <div className="hero-art-frame">
-            <Image
-              src="/classes/vim.webp"
-              alt="Воин в мире Jade Dynasty"
-              fill
-              priority
-              sizes="(max-width: 900px) 88vw, 46vw"
-            />
-          </div>
-          <div className="hero-seal" aria-hidden="true">天</div>
-          <p className="hero-caption"><span>Мир приключений</span> Ваш путь начинается здесь</p>
-        </div>
-
-        <a className="scroll-cue" href="#about" aria-label="Перейти к разделу об игре">
-          <span>Листайте вниз</span>
-          <i aria-hidden="true">↓</i>
-        </a>
-      </section>
-
-      <section className="about section" id="about">
-        <div className="section-heading">
-          <p className="eyebrow centered"><span /> Об игре <span /></p>
-          <h2>Мир, полный <em>легенд</em></h2>
-          <p>
-            Jade Dynasty — многопользовательская ролевая игра в атмосфере восточного фэнтези.
-            Здесь вы создаёте героя, выбираете класс, проходите сюжетные задания и сражаетесь
-            рядом с другими игроками.
-          </p>
-        </div>
-
-        <div className="feature-grid">
-          {worldFeatures.map((feature) => (
-            <article className="feature-card" key={feature.mark}>
-              <span className="feature-number">{feature.mark}</span>
-              <div className="feature-symbol" aria-hidden="true">◆</div>
-              <h3>{feature.title}</h3>
-              <p>{feature.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="server section" id="server">
-        <div className="server-panel">
-          <div className="server-copy">
-            <p className="eyebrow"><span /> О сервере</p>
-            <h2>Знакомая эпоха.<br /><em>Новый путь.</em></h2>
-            <p>
-              Проект строится на версии 3.1.1 с максимальным уровнем 160 РБ и двумя расами.
-              Мы сохраняем узнаваемый мир Jade Dynasty и собираем понятную точку входа как
-              для давних игроков, так и для тех, кто только знакомится с игрой.
+        <div className="hero-shade" />
+        <div className="hero-title">
+          <div className="cloud-emblem" aria-hidden="true"><span>云</span></div>
+          <p className="jade-word">Jade</p>
+          <p className="dynasty-word">Dynasty</p>
+          <div className="server-ribbon"><span>сервер</span> 3.1.1</div>
+          <p className="hero-subtitle">Восточная фэнтезийная MMORPG</p>
+          <a className="ornate-button primary" href="#start"><span>Начать играть</span></a>
+          <button className="ornate-button secondary" type="button" onClick={() => setVideoNote(true)}>
+            <i aria-hidden="true">▶</i> Смотреть игровой процесс
+          </button>
+          {videoNote && (
+            <p className="video-note" role="status">
+              Игровой ролик появится после подготовки материалов.
+              <button type="button" aria-label="Закрыть сообщение" onClick={() => setVideoNote(false)}>×</button>
             </p>
-          </div>
-          <div className="server-stats">
-            <article><span>Версия игры</span><strong>3.1.1</strong></article>
-            <article><span>Развитие героя</span><strong>160 РБ</strong></article>
-            <article><span>Игровые расы</span><strong>2</strong></article>
-            <article><span>Доступные классы</span><strong>12</strong></article>
-          </div>
+          )}
         </div>
+        <div className="cloud-divider" aria-hidden="true" />
       </section>
 
-      <section className="classes section" id="classes">
-        <div className="classes-heading">
-          <div>
-            <p className="eyebrow"><span /> Классы</p>
-            <h2>Выберите свой <em>путь</em></h2>
-          </div>
-          <p>
-            Двенадцать героев уже собраны в едином визуальном стиле. Выберите имя,
-            чтобы рассмотреть образ класса.
-          </p>
-        </div>
+      <div className="parchment-content">
+        <section className="intro-grid section-wrap" aria-label="Знакомство с игрой и сервером">
+          <article className="ornate-panel about-panel" id="about">
+            <SectionTitle symbol="閣">Об игре</SectionTitle>
+            <div className="world-picture" role="img" aria-label="Небесные города мира Jade Dynasty" />
+            <p className="panel-intro">
+              Jade Dynasty — MMORPG в мире восточного фэнтези. Исследуйте небесные земли,
+              развивайте героя и проходите испытания вместе с другими игроками.
+            </p>
+            <div className="mini-features">
+              <div><b>界</b><strong>Огромный мир</strong><span>Свободное путешествие по небесным землям</span></div>
+              <div><b>剑</b><strong>Динамичные бои</strong><span>Зрелищные сражения и яркие умения</span></div>
+              <div><b>仙</b><strong>Рост персонажа</strong><span>Прокачивайте героя и раскрывайте потенциал</span></div>
+            </div>
+          </article>
 
-        <div className="class-showcase">
-          <div className="class-stage">
-            <Image
-              key={selectedClass.slug}
-              src={`/classes/${selectedClass.slug}.webp`}
-              alt={`Класс ${selectedClass.name}`}
-              fill
-              sizes="(max-width: 900px) 92vw, 44vw"
-            />
-            <div className="class-stage-copy">
-              <span>Класс {String(activeClass + 1).padStart(2, "0")}</span>
-              <strong>{selectedClass.name}</strong>
+          <article className="ornate-panel server-panel" id="server">
+            <SectionTitle symbol="印">О сервере</SectionTitle>
+            <div className="server-facts">
+              <div><b>旋</b><span><strong>3.1.1</strong><small>версия игры</small></span></div>
+              <div><b>鼎</b><span><strong>160 РБ</strong><small>максимальный уровень</small></span></div>
+              <div><b>族</b><span><strong>2 расы</strong><small>игровые народы</small></span></div>
+              <div><b>武</b><span><strong>12 классов</strong><small>рабочий состав</small></span></div>
+            </div>
+            <div className="server-landscape" role="img" aria-label="Город игрового мира" />
+          </article>
+        </section>
+
+        <section className="world section-wrap" id="world">
+          <OrnamentHeading>Мир и возможности</OrnamentHeading>
+          <div className="world-grid">
+            <button className="video-frame" type="button" onClick={() => setVideoNote(true)} aria-label="Смотреть игровой процесс">
+              <span className="play"><i>▶</i></span>
+              <span className="video-controls"><i>▶</i><em /><i>●</i><i>⛶</i></span>
+            </button>
+            <div className="feature-tiles">
+              {features.map((feature) => (
+                <article key={feature.title}>
+                  <b>{feature.symbol}</b>
+                  <strong>{feature.title}</strong>
+                </article>
+              ))}
             </div>
           </div>
+        </section>
 
-          <div className="class-selector" role="list" aria-label="Список классов">
+        <section className="class-section section-wrap" id="classes">
+          <OrnamentHeading>Выбери свой путь</OrnamentHeading>
+          <div className={showAllClasses ? "class-grid expanded" : "class-grid"}>
             {classes.map((item, index) => (
-              <button
-                className={index === activeClass ? "class-option is-active" : "class-option"}
-                key={item.slug}
-                type="button"
-                onClick={() => setActiveClass(index)}
-                aria-pressed={index === activeClass}
-              >
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{item.name}</strong>
-                <i aria-hidden="true">→</i>
-              </button>
+              <article className="class-card" key={item.slug} hidden={!showAllClasses && index > 3}>
+                <div className="class-image">
+                  <Image src={`/classes/${item.slug}.webp`} alt={`Класс ${item.name}`} fill sizes="(max-width: 620px) 48vw, (max-width: 950px) 25vw, 260px" />
+                </div>
+                <div className="class-name"><strong>{item.name}</strong><span>{item.seal}</span></div>
+              </article>
             ))}
-            <p className="class-note">
-              Роли, оружие и особенности классов будут добавлены после проверки игровых данных.
-            </p>
           </div>
-        </div>
-      </section>
+          <button className="all-classes" type="button" onClick={() => setShowAllClasses((value) => !value)}>
+            {showAllClasses ? "Скрыть дополнительные классы" : "Все 12 классов"} <span>{showAllClasses ? "↑" : "›"}</span>
+          </button>
+        </section>
 
-      <section className="start section" id="start">
-        <div className="start-ornament" aria-hidden="true">✦</div>
-        <p className="eyebrow centered"><span /> Скоро открытие <span /></p>
-        <h2>Начните свою <em>легенду</em></h2>
-        <p>
-          Регистрация, загрузка клиента и новости о запуске появятся здесь после подготовки игровых сервисов.
-        </p>
-        <button className="button button-primary" type="button" disabled>Подготовка к запуску</button>
-      </section>
+        <section className="lower-grid section-wrap" id="events">
+          <article className="ornate-panel compact-panel">
+            <SectionTitle>Чем заняться</SectionTitle>
+            <div className="activity-grid">
+              <div className="activity activity-one"><span>Исследовать мир</span></div>
+              <div className="activity activity-two"><span>Проходить подземелья</span></div>
+              <div className="activity activity-three"><span>Собирать и создавать</span></div>
+              <div className="activity activity-four"><span>Вступать в гильдии</span></div>
+            </div>
+          </article>
 
-      <section className="account-note" id="account">
-        <span>Личный кабинет</span>
-        <p>Отдельная страница находится в проектировании и будет собрана следующим этапом.</p>
-      </section>
+          <article className="ornate-panel compact-panel events-panel">
+            <SectionTitle>События</SectionTitle>
+            <div className="event-main" />
+            <div className="event-row"><div /><div /></div>
+            <p>Расписание и новости появятся ближе к запуску.</p>
+          </article>
 
-      <footer>
-        <a className="brand footer-brand" href="#top" aria-label="Jade Dynasty — наверх">
-          <span className="brand-mark" aria-hidden="true">JD</span>
-          <span className="brand-copy"><strong>Jade Dynasty</strong><small>версия 3.1.1</small></span>
-        </a>
-        <p>Неофициальный игровой проект. Название сервера находится в разработке.</p>
-        <a href="#top">Наверх ↑</a>
-      </footer>
+          <article className="ornate-panel compact-panel start-panel" id="start">
+            <SectionTitle>Начать играть</SectionTitle>
+            <ol>
+              <li><b>1</b><i>人</i><span>Создайте аккаунт</span></li>
+              <li><b>2</b><i>↓</i><span>Установите лаунчер</span></li>
+              <li><b>3</b><i>旋</i><span>Войдите в игру</span></li>
+            </ol>
+            <p>Регистрация и загрузка откроются после подготовки игровых сервисов.</p>
+          </article>
+        </section>
+
+        <section className="cabinet-note section-wrap" id="cabinet">
+          <strong>Личный кабинет</strong>
+          <span>Будет собран отдельной страницей на следующем этапе.</span>
+        </section>
+
+        <footer>
+          <span className="footer-rule" />
+          <a className="round-logo" href="#top" aria-label="Jade Dynasty — наверх">JD</a>
+          <strong>Jade Dynasty</strong>
+          <small>Версия 3.1.1</small>
+          <span className="footer-rule" />
+        </footer>
+      </div>
     </main>
   );
+}
+
+function SectionTitle({ children, symbol }: { children: React.ReactNode; symbol?: string }) {
+  return <h2 className="section-title">{symbol && <b aria-hidden="true">{symbol}</b>}<span>{children}</span></h2>;
+}
+
+function OrnamentHeading({ children }: { children: React.ReactNode }) {
+  return <h2 className="ornament-heading"><i /><b>◇</b><span>{children}</span><b>◇</b><i /></h2>;
 }
