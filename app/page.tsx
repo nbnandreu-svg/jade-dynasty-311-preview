@@ -118,31 +118,59 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="intro-grid section-wrap" aria-label="Знакомство с игрой и сервером">
-          <article className="ornate-panel about-panel" id="about">
-            <SectionTitle>Об игре</SectionTitle>
-            <div className="world-picture" role="img" aria-label="Небесные города мира Jade Dynasty" />
-            <p className="panel-intro">
-              Jade Dynasty — MMORPG в мире восточного фэнтези. Исследуйте небесные земли,
-              развивайте героя и проходите испытания вместе с другими игроками.
+        <section className="value-section section-wrap" id="about" aria-labelledby="value-title">
+          <div className="value-intro">
+            <span>Восточная фэнтезийная MMORPG</span>
+            <h2 id="value-title">Что ждёт вас в Jade Dynasty</h2>
+            <p>
+              Исследуйте небесные земли, развивайте героя, проходите испытания
+              и находите союзников в большом мире восточного фэнтези.
             </p>
-            <div className="mini-features">
-              <div><strong>Огромный мир</strong><span>Свободное путешествие по небесным землям</span></div>
-              <div><strong>Динамичные бои</strong><span>Зрелищные сражения и яркие умения</span></div>
-              <div><strong>Рост персонажа</strong><span>Прокачивайте героя и раскрывайте потенциал</span></div>
-            </div>
-          </article>
+          </div>
 
-          <article className="ornate-panel server-panel" id="server">
-            <SectionTitle>О сервере</SectionTitle>
-            <div className="server-facts">
-              <div><span><strong>3.1.1</strong><small>версия игры</small></span></div>
-              <div><span><strong>160 РБ</strong><small>максимальный уровень</small></span></div>
-              <div><span><strong>2 расы</strong><small>игровые народы</small></span></div>
-              <div><span><strong>12 классов</strong><small>рабочий состав</small></span></div>
+          <div className="value-layout">
+            <article className="value-lead">
+              <div className="value-lead-copy">
+                <span>Открывайте мир</span>
+                <h3>Путешествие, в котором всегда есть следующий горизонт</h3>
+                <p>
+                  Отправляйтесь к небесным городам и древним землям, находите новые
+                  места и выбирайте, чем заняться сегодня.
+                </p>
+                <a href="#world">Посмотреть игровой процесс</a>
+              </div>
+            </article>
+
+            <div className="value-cards" aria-label="Основные возможности игры">
+              <article className="value-card value-card-growth">
+                <span>01</span>
+                <div><h3>Развивайте героя</h3><p>Выберите класс, осваивайте умения и двигайтесь к 160 РБ.</p></div>
+              </article>
+              <article className="value-card value-card-battle">
+                <span>02</span>
+                <div><h3>Проходите испытания</h3><p>Сражайтесь с сильными противниками и проверяйте выбранный стиль игры.</p></div>
+              </article>
+              <article className="value-card value-card-together">
+                <span>03</span>
+                <div><h3>Играйте вместе</h3><p>Объединяйтесь с другими игроками, вступайте в гильдии и участвуйте в событиях.</p></div>
+              </article>
             </div>
-            <div className="server-landscape" role="img" aria-label="Город игрового мира" />
-          </article>
+          </div>
+
+          <div className="server-passport" id="server">
+            <div className="passport-copy">
+              <span>О сервере</span>
+              <h3>Параметры без догадок</h3>
+              <p>Всё главное можно проверить до регистрации.</p>
+            </div>
+            <dl>
+              <div><dt>Версия игры</dt><dd>3.1.1</dd></div>
+              <div><dt>Максимальный уровень</dt><dd>160 РБ</dd></div>
+              <div><dt>Игровые расы</dt><dd>2</dd></div>
+              <div><dt>Классы</dt><dd>12</dd></div>
+            </dl>
+            <a href="/account#register">Создать аккаунт</a>
+          </div>
         </section>
 
         <section className="world section-wrap" id="world">

@@ -71,7 +71,39 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .adventure-art { position: relative; width: 100%; aspect-ratio: 205 / 136; overflow: hidden; border-radius: 50% 50% 4px 4px / 72% 72% 4px 4px; background: #dce8dd; }
 .adventure-art img { object-fit: cover; }
 .adventure-card strong { position: relative; z-index: 4; min-height: 34px; display: grid; place-items: center; margin: -9px 5px 0; padding: 7px 6px 5px; border: 1px solid rgba(242,213,152,.7); color: #fff8df; background: var(--ink); font-family: var(--serif); font-size: 10px; letter-spacing: .04em; text-align: center; text-transform: uppercase; clip-path: polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%); }
-.intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+.value-section { padding-top: 34px; scroll-margin-top: 78px; }
+.value-intro { width: min(820px, 100%); margin: 0 auto 30px; text-align: center; }
+.value-intro > span, .passport-copy > span, .value-lead-copy > span { color: var(--orange-dark); font-family: var(--serif); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.value-intro h2 { margin: 11px 0 13px; color: var(--ink); font-family: var(--serif); font-size: clamp(31px, 3vw, 48px); font-weight: 500; letter-spacing: .04em; line-height: 1.05; text-transform: uppercase; }
+.value-intro p { width: min(670px, 100%); margin: 0 auto; color: var(--muted); font-family: var(--serif); font-size: 15px; line-height: 1.65; }
+.value-layout { display: grid; grid-template-columns: minmax(0, 1.42fr) minmax(360px, .78fr); gap: 22px; }
+.value-lead { position: relative; min-height: 590px; display: flex; align-items: end; overflow: hidden; border: 1px solid var(--gold-line); background: url('/sections/world-overview.webp') 61% center / cover no-repeat; box-shadow: inset 0 0 0 6px rgba(255,249,232,.38); }
+.value-lead::before { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(8,62,73,.9) 0, rgba(8,62,73,.48) 35%, transparent 68%); }
+.value-lead-copy { position: relative; z-index: 2; width: min(670px, calc(100% - 60px)); margin: 0 30px 30px; padding: 26px 29px 28px; border: 1px solid rgba(246,225,180,.52); color: #fff9e9; background: rgba(9,67,78,.78); backdrop-filter: blur(7px); }
+.value-lead-copy > span { color: #f5c785; }
+.value-lead-copy h3 { max-width: 590px; margin: 10px 0 11px; font-family: var(--serif); font-size: clamp(25px, 2.2vw, 36px); font-weight: 500; line-height: 1.08; }
+.value-lead-copy p { max-width: 570px; margin: 0; color: rgba(255,249,233,.82); font-family: var(--serif); font-size: 13px; line-height: 1.55; }
+.value-lead-copy a { display: inline-flex; align-items: center; min-height: 38px; margin-top: 18px; padding: 8px 16px; border: 1px solid rgba(248,226,177,.7); color: #fff9e9; font-family: var(--serif); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; transition: color 160ms ease, background 160ms ease; }
+.value-lead-copy a:hover { color: var(--ink-deep); background: #fff5dd; }
+.value-cards { display: grid; grid-template-rows: repeat(3, 1fr); gap: 18px; }
+.value-card { position: relative; min-height: 178px; display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 18px; overflow: hidden; padding: 23px; border: 1px solid var(--gold-line); color: white; background-position: center; background-size: cover; box-shadow: inset 0 0 0 5px rgba(255,249,232,.25); }
+.value-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7,54,65,.93), rgba(7,54,65,.68) 67%, rgba(7,54,65,.24)); }
+.value-card > span, .value-card > div { position: relative; z-index: 2; }
+.value-card > span { color: #f3be75; font-family: var(--serif); font-size: 26px; line-height: 1; }
+.value-card h3 { margin: 0 0 7px; font-family: var(--serif); font-size: 18px; letter-spacing: .04em; text-transform: uppercase; }
+.value-card p { max-width: 330px; margin: 0; color: rgba(255,255,255,.8); font-size: 10px; line-height: 1.45; }
+.value-card-growth { background-image: url('/sections/server-world.webp'); }
+.value-card-battle { background-image: url('/sections/gameplay-arena.webp'); }
+.value-card-together { background-image: url('/sections/news-airship.webp'); }
+.server-passport { display: grid; grid-template-columns: minmax(230px, .8fr) minmax(560px, 2fr) auto; align-items: center; gap: 26px; margin-top: 22px; padding: 24px 27px; border: 1px solid var(--gold-line); background: linear-gradient(120deg, rgba(255,250,239,.98), rgba(229,242,235,.9)); box-shadow: inset 0 0 0 5px rgba(255,255,255,.56); scroll-margin-top: 78px; }
+.passport-copy h3 { margin: 6px 0 4px; color: var(--ink); font-family: var(--serif); font-size: 25px; font-weight: 500; text-transform: uppercase; }
+.passport-copy p { margin: 0; color: var(--muted); font-size: 10px; }
+.server-passport dl { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0; }
+.server-passport dl div { min-height: 76px; display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 8px 18px; border-left: 1px solid var(--gold-line); }
+.server-passport dt { order: 2; color: var(--muted); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
+.server-passport dd { margin: 0; color: var(--ink); font-family: var(--serif); font-size: 25px; font-weight: 700; }
+.server-passport > a { min-width: 174px; min-height: 48px; display: grid; place-items: center; padding: 10px 18px; border: 1px solid #f2b76a; color: #fff9e9; background: linear-gradient(180deg, var(--orange), var(--orange-dark)); box-shadow: inset 0 0 0 3px rgba(255,211,145,.2); clip-path: polygon(6% 0,94% 0,100% 24%,100% 76%,94% 100%,6% 100%,0 76%,0 24%); font-family: var(--serif); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-align: center; text-transform: uppercase; transition: filter 160ms ease, transform 160ms ease; }
+.server-passport > a:hover { filter: brightness(1.08); transform: translateY(-2px); }
 .ornate-panel { position: relative; padding: 26px; border: 1px solid var(--gold-line); background: rgba(255,250,239,.72); box-shadow: inset 0 0 0 5px rgba(255,255,255,.65), inset 0 0 0 6px rgba(180,126,53,.24); }
 .ornate-panel::before, .ornate-panel::after { content: "◇"; position: absolute; z-index: 2; color: var(--gold); font-size: 17px; line-height: 1; background: var(--paper); }
 .ornate-panel::before { top: -8px; left: -8px; }
@@ -207,7 +239,13 @@ footer small { color: var(--muted); font-size: 9px; letter-spacing: .09em; text-
   .adventure-strip { width: calc(100% - 22px); margin-top: -8px; padding-left: 11px; padding-right: 11px; }
   .adventure-list { display: flex; justify-content: flex-start; gap: 20px; overflow-x: auto; padding: 4px 18px 17px; scroll-snap-type: x proximity; scrollbar-width: thin; }
   .adventure-card { flex: 0 0 205px; scroll-snap-align: start; }
-  .intro-grid { grid-template-columns: 1fr; }
+  .value-layout { grid-template-columns: 1fr; }
+  .value-lead { min-height: 520px; }
+  .value-cards { grid-template-columns: repeat(3, 1fr); grid-template-rows: auto; }
+  .value-card { min-height: 220px; grid-template-columns: 1fr; align-content: end; }
+  .server-passport { grid-template-columns: 1fr; }
+  .server-passport dl { grid-row: 2; }
+  .server-passport > a { justify-self: start; }
   .world-grid { grid-template-columns: 1fr; }
   .video-frame { min-height: 500px; }
   .class-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -229,6 +267,20 @@ footer small { color: var(--muted); font-size: 9px; letter-spacing: .09em; text-
   .adventure-card { width: 100%; min-width: 0; }
   .adventure-card:last-child { grid-column: 1 / -1; width: calc((100% - 13px) / 2); justify-self: center; }
   .adventure-card::before { height: calc((100vw - 67px) * .51); max-height: 124px; }
+  .value-section { padding-top: 22px; }
+  .value-intro { margin-bottom: 22px; }
+  .value-intro h2 { font-size: 29px; }
+  .value-intro p { font-size: 13px; }
+  .value-lead { min-height: 470px; background-position: 68% center; }
+  .value-lead-copy { width: calc(100% - 28px); margin: 0 14px 14px; padding: 20px; }
+  .value-lead-copy h3 { font-size: 25px; }
+  .value-cards { grid-template-columns: 1fr; gap: 12px; }
+  .value-card { min-height: 174px; grid-template-columns: auto 1fr; }
+  .server-passport { gap: 18px; padding: 21px 18px; }
+  .server-passport dl { grid-template-columns: 1fr 1fr; }
+  .server-passport dl div:nth-child(odd) { border-left: 0; }
+  .server-passport dl div { border-top: 1px solid var(--gold-line); }
+  .server-passport > a { width: 100%; }
   .ornate-panel { padding: 18px; }
   .world-picture { height: 245px; }
   .server-facts { grid-template-columns: 1fr; }
