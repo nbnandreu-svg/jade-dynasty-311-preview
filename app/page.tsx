@@ -4,25 +4,25 @@ import Image from "next/image";
 import { useState } from "react";
 
 const classes = [
-  { name: "Арден", slug: "arden", seal: "弓" },
-  { name: "Вим", slug: "vim", seal: "武" },
-  { name: "Титан", slug: "titan", seal: "力" },
-  { name: "Ская", slug: "skaya", seal: "光" },
-  { name: "Хаккан", slug: "hakkan", seal: "刃" },
-  { name: "Войда", slug: "voida", seal: "影" },
-  { name: "Айне", slug: "aine", seal: "霜" },
-  { name: "Умбра", slug: "umbra", seal: "夜" },
-  { name: "Тайо", slug: "tayo", seal: "炎" },
-  { name: "Вайлин", slug: "vailin", seal: "音" },
-  { name: "Морто", slug: "morto", seal: "魂" },
-  { name: "Ниру", slug: "niru", seal: "星" },
+  { name: "Арден", slug: "arden" },
+  { name: "Вим", slug: "vim" },
+  { name: "Титан", slug: "titan" },
+  { name: "Ская", slug: "skaya" },
+  { name: "Хаккан", slug: "hakkan" },
+  { name: "Войда", slug: "voida" },
+  { name: "Айне", slug: "aine" },
+  { name: "Умбра", slug: "umbra" },
+  { name: "Тайо", slug: "tayo" },
+  { name: "Вайлин", slug: "vailin" },
+  { name: "Морто", slug: "morto" },
+  { name: "Ниру", slug: "niru" },
 ];
 
 const features = [
-  { symbol: "山", title: "Исследовать мир" },
-  { symbol: "道", title: "Развивать героя" },
-  { symbol: "王", title: "Побеждать боссов" },
-  { symbol: "盟", title: "Сражаться вместе" },
+  { number: "01", title: "Исследовать мир", text: "Открывайте города, долины и небесные земли." },
+  { number: "02", title: "Развивать героя", text: "Собирайте снаряжение и усиливайте умения." },
+  { number: "03", title: "Побеждать боссов", text: "Проходите испытания в группе или в одиночку." },
+  { number: "04", title: "Сражаться вместе", text: "Создавайте гильдии и участвуйте в событиях." },
 ];
 
 const adventureItems = [
@@ -86,13 +86,11 @@ export default function Home() {
           <a className="active" href="#start" onClick={() => setMenuOpen(false)}>Начать</a>
         </nav>
 
-        <a className="cabinet-button" href="#cabinet" aria-label="Личный кабинет" title="Личный кабинет">
-          <span aria-hidden="true">●</span>
-        </a>
+        <a className="cabinet-button" href="/account">Личный кабинет</a>
       </header>
 
       <section className="hero" id="top" aria-label="Jade Dynasty — Навстречу небесам">
-        <a className="hero-start-hotspot" href="#start" aria-label="Начать путь в Jade Dynasty" />
+        <a className="hero-start-button" href="/account#register">Начать путь</a>
         <div className="cloud-divider" aria-hidden="true" />
       </section>
 
@@ -122,26 +120,26 @@ export default function Home() {
 
         <section className="intro-grid section-wrap" aria-label="Знакомство с игрой и сервером">
           <article className="ornate-panel about-panel" id="about">
-            <SectionTitle symbol="閣">Об игре</SectionTitle>
+            <SectionTitle>Об игре</SectionTitle>
             <div className="world-picture" role="img" aria-label="Небесные города мира Jade Dynasty" />
             <p className="panel-intro">
               Jade Dynasty — MMORPG в мире восточного фэнтези. Исследуйте небесные земли,
               развивайте героя и проходите испытания вместе с другими игроками.
             </p>
             <div className="mini-features">
-              <div><b>界</b><strong>Огромный мир</strong><span>Свободное путешествие по небесным землям</span></div>
-              <div><b>剑</b><strong>Динамичные бои</strong><span>Зрелищные сражения и яркие умения</span></div>
-              <div><b>仙</b><strong>Рост персонажа</strong><span>Прокачивайте героя и раскрывайте потенциал</span></div>
+              <div><strong>Огромный мир</strong><span>Свободное путешествие по небесным землям</span></div>
+              <div><strong>Динамичные бои</strong><span>Зрелищные сражения и яркие умения</span></div>
+              <div><strong>Рост персонажа</strong><span>Прокачивайте героя и раскрывайте потенциал</span></div>
             </div>
           </article>
 
           <article className="ornate-panel server-panel" id="server">
-            <SectionTitle symbol="印">О сервере</SectionTitle>
+            <SectionTitle>О сервере</SectionTitle>
             <div className="server-facts">
-              <div><b>旋</b><span><strong>3.1.1</strong><small>версия игры</small></span></div>
-              <div><b>鼎</b><span><strong>160 РБ</strong><small>максимальный уровень</small></span></div>
-              <div><b>族</b><span><strong>2 расы</strong><small>игровые народы</small></span></div>
-              <div><b>武</b><span><strong>12 классов</strong><small>рабочий состав</small></span></div>
+              <div><span><strong>3.1.1</strong><small>версия игры</small></span></div>
+              <div><span><strong>160 РБ</strong><small>максимальный уровень</small></span></div>
+              <div><span><strong>2 расы</strong><small>игровые народы</small></span></div>
+              <div><span><strong>12 классов</strong><small>рабочий состав</small></span></div>
             </div>
             <div className="server-landscape" role="img" aria-label="Город игрового мира" />
           </article>
@@ -157,8 +155,9 @@ export default function Home() {
             <div className="feature-tiles">
               {features.map((feature) => (
                 <article key={feature.title}>
-                  <b>{feature.symbol}</b>
+                  <b>{feature.number}</b>
                   <strong>{feature.title}</strong>
+                  <span>{feature.text}</span>
                 </article>
               ))}
             </div>
@@ -179,7 +178,7 @@ export default function Home() {
                 <div className="class-image">
                   <Image src={`/classes/${item.slug}.webp`} alt={`Класс ${item.name}`} fill sizes="(max-width: 620px) 48vw, (max-width: 950px) 25vw, 260px" unoptimized />
                 </div>
-                <div className="class-name"><strong>{item.name}</strong><span>{item.seal}</span></div>
+                <div className="class-name"><strong>{item.name}</strong></div>
               </button>
             ))}
           </div>
@@ -187,7 +186,7 @@ export default function Home() {
             <div className="class-selection" role="status">
               <span>Вы выбрали класс</span>
               <strong>{classes.find((item) => item.slug === selectedClass)?.name}</strong>
-              <a href="#start">Перейти к началу игры</a>
+              <a href="/account#register">Создать аккаунт</a>
             </div>
           )}
         </section>
@@ -213,17 +212,18 @@ export default function Home() {
           <article className="ornate-panel compact-panel start-panel" id="start">
             <SectionTitle>Начать играть</SectionTitle>
             <ol>
-              <li><b>1</b><i>人</i><span>Создайте аккаунт</span></li>
-              <li><b>2</b><i>↓</i><span>Установите лаунчер</span></li>
-              <li><b>3</b><i>旋</i><span>Войдите в игру</span></li>
+              <li><a href="/account#register"><b>1</b><span>Создайте аккаунт</span></a></li>
+              <li><b>2</b><span>Установите лаунчер</span></li>
+              <li><b>3</b><span>Войдите в игру</span></li>
             </ol>
             <p>Регистрация и загрузка откроются после подготовки игровых сервисов.</p>
           </article>
         </section>
 
-        <section className="cabinet-note section-wrap" id="cabinet">
+        <section className="cabinet-note section-wrap">
           <strong>Личный кабинет</strong>
-          <span>Будет собран отдельной страницей на следующем этапе.</span>
+          <span>Регистрация и вход вынесены на отдельную страницу.</span>
+          <a href="/account">Открыть кабинет</a>
         </section>
 
         <footer>
@@ -238,8 +238,8 @@ export default function Home() {
   );
 }
 
-function SectionTitle({ children, symbol }: { children: React.ReactNode; symbol?: string }) {
-  return <h2 className="section-title">{symbol && <b aria-hidden="true">{symbol}</b>}<span>{children}</span></h2>;
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return <h2 className="section-title"><span>{children}</span></h2>;
 }
 
 function OrnamentHeading({ children }: { children: React.ReactNode }) {
