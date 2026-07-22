@@ -53,30 +53,22 @@ export default function Home() {
           <a className="active" href="#start" onClick={() => setMenuOpen(false)}>Начать</a>
         </nav>
 
-        <a className="cabinet-button" href="#cabinet"><span>Личный кабинет</span></a>
+        <a className="cabinet-button" href="#cabinet" aria-label="Личный кабинет" title="Личный кабинет">
+          <span aria-hidden="true">●</span>
+        </a>
       </header>
 
       <section className="hero" id="top">
-        <div className="hero-shade" />
-        <div className="hero-title">
-          <div className="cloud-emblem" aria-hidden="true"><span>云</span></div>
-          <p className="jade-word">Jade</p>
-          <p className="dynasty-word">Dynasty</p>
-          <div className="server-ribbon"><span>сервер</span> 3.1.1</div>
-          <p className="hero-subtitle">Восточная фэнтезийная MMORPG</p>
-          <a className="ornate-button primary" href="#start"><span>Начать играть</span></a>
-          <button className="ornate-button secondary" type="button" onClick={() => setVideoNote(true)}>
-            <i aria-hidden="true">▶</i> Смотреть игровой процесс
-          </button>
-          {videoNote && (
-            <p className="video-note" role="status">
-              Игровой ролик появится после подготовки материалов.
-              <button type="button" aria-label="Закрыть сообщение" onClick={() => setVideoNote(false)}>×</button>
-            </p>
-          )}
-        </div>
+        <a className="hero-start-hotspot" href="#start" aria-label="Начать путь в Jade Dynasty" />
         <div className="cloud-divider" aria-hidden="true" />
       </section>
+
+      {videoNote && (
+        <div className="floating-note" role="status">
+          Игровой ролик появится после подготовки материалов.
+          <button type="button" aria-label="Закрыть сообщение" onClick={() => setVideoNote(false)}>×</button>
+        </div>
+      )}
 
       <div className="parchment-content">
         <section className="intro-grid section-wrap" aria-label="Знакомство с игрой и сервером">
