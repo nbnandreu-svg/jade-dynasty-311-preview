@@ -35,6 +35,7 @@ test("server-renders the approved landing-page structure", async () => {
 
   const adventureCards = html.match(/class="adventure-card"/g) ?? [];
   assert.equal(adventureCards.length, 5);
+  assert.match(html, /<a class="adventure-card" href="#world">/);
 
   for (const title of [
     "Небесные путешествия",
@@ -48,8 +49,10 @@ test("server-renders the approved landing-page structure", async () => {
 
   const classCards = html.match(/class="class-card"/g) ?? [];
   assert.equal(classCards.length, 12);
+  assert.match(html, /<button class="class-card" type="button"[^>]*aria-pressed="false"/);
   assert.doesNotMatch(html, /class="class-card"[^>]*\bhidden\b/);
   assert.doesNotMatch(html, />Все 12 классов</);
+  assert.doesNotMatch(html, /\/_vinext\/image\?/);
 });
 
 test("ships separate adventure sources in PNG and WebP", async () => {

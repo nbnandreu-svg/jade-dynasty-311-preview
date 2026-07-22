@@ -29,26 +29,31 @@ const adventureItems = [
   {
     title: "Небесные путешествия",
     image: "/adventures/01-sky-travel.webp",
+    href: "#world",
     alt: "Воздушный корабль над небесными землями",
   },
   {
     title: "Торговля и ремёсла",
     image: "/adventures/02-trade-craft.webp",
+    href: "#activities",
     alt: "Торговая улица восточного города",
   },
   {
     title: "Эпические битвы",
     image: "/adventures/03-epic-battles.webp",
+    href: "#classes",
     alt: "Сражение героев с магическими умениями",
   },
   {
     title: "Исследование мира",
     image: "/adventures/04-world-exploration.webp",
+    href: "#about",
     alt: "Небесный храм среди гор и водопадов",
   },
   {
     title: "Праздники и события",
     image: "/adventures/05-festivals-events.webp",
+    href: "#events",
     alt: "Праздник с фонарями и фейерверками",
   },
 ];
@@ -56,6 +61,7 @@ const adventureItems = [
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [videoNote, setVideoNote] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<string | null>(null);
 
   return (
     <main className="page-shell">
@@ -104,12 +110,12 @@ export default function Home() {
           </h2>
           <div className="adventure-list">
             {adventureItems.map((item) => (
-              <article className="adventure-card" key={item.image}>
+              <a className="adventure-card" href={item.href} key={item.image}>
                 <div className="adventure-art">
-                  <Image src={item.image} alt={item.alt} fill sizes="205px" />
+                  <Image src={item.image} alt={item.alt} fill sizes="205px" unoptimized />
                 </div>
                 <strong>{item.title}</strong>
-              </article>
+              </a>
             ))}
           </div>
         </section>
@@ -163,20 +169,33 @@ export default function Home() {
           <OrnamentHeading>Выбери свой путь</OrnamentHeading>
           <div className="class-grid">
             {classes.map((item) => (
-              <article className="class-card" key={item.slug}>
+              <button
+                className={selectedClass === item.slug ? "class-card selected" : "class-card"}
+                type="button"
+                key={item.slug}
+                aria-pressed={selectedClass === item.slug}
+                onClick={() => setSelectedClass(item.slug)}
+              >
                 <div className="class-image">
-                  <Image src={`/classes/${item.slug}.webp`} alt={`Класс ${item.name}`} fill sizes="(max-width: 620px) 48vw, (max-width: 950px) 25vw, 260px" />
+                  <Image src={`/classes/${item.slug}.webp`} alt={`Класс ${item.name}`} fill sizes="(max-width: 620px) 48vw, (max-width: 950px) 25vw, 260px" unoptimized />
                 </div>
                 <div className="class-name"><strong>{item.name}</strong><span>{item.seal}</span></div>
-              </article>
+              </button>
             ))}
           </div>
+          {selectedClass && (
+            <div className="class-selection" role="status">
+              <span>Вы выбрали класс</span>
+              <strong>{classes.find((item) => item.slug === selectedClass)?.name}</strong>
+              <a href="#start">Перейти к началу игры</a>
+            </div>
+          )}
         </section>
 
         <section className="lower-grid section-wrap" id="events">
           <article className="ornate-panel compact-panel">
             <SectionTitle>Чем заняться</SectionTitle>
-            <div className="activity-grid">
+            <div className="activity-grid" id="activities">
               <div className="activity activity-one"><span>Исследовать мир</span></div>
               <div className="activity activity-two"><span>Проходить подземелья</span></div>
               <div className="activity activity-three"><span>Собирать и создавать</span></div>
