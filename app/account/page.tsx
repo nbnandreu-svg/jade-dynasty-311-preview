@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { ProjectMark } from "../ProjectMark";
 
 const classNames: Record<string, string> = {
   arden: "Арден",
@@ -43,7 +44,7 @@ export default function AccountPage() {
   return (
     <main className="account-page">
       <header className="account-header">
-        <Link className="round-logo" href="/" aria-label="Вернуться на главную">JD</Link>
+        <Link className="round-logo" href="/" aria-label="Вернуться на главную"><ProjectMark /></Link>
         <Link className="account-back" href="/">← На главную</Link>
       </header>
 

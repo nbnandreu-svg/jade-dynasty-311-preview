@@ -1,6 +1,7 @@
 "use client";
 
 import { type CSSProperties, type KeyboardEvent, type TouchEvent, useMemo, useState } from "react";
+import { ProjectMark } from "./ProjectMark";
 
 type ClassItem = {
   name: string;
@@ -88,7 +89,7 @@ export default function Home() {
       <a className="skip-link" href="#content">Перейти к содержанию</a>
 
       <header className="topbar">
-        <a className="round-logo" href="#top" aria-label="Jade Dynasty — наверх"><span>JD</span></a>
+        <a className="round-logo" href="#top" aria-label="Jade Dynasty — наверх"><ProjectMark /></a>
         <nav className={menuOpen ? "topnav is-open" : "topnav"} aria-label="Основная навигация">
           <a href="#about" onClick={() => setMenuOpen(false)}>Об игре</a>
           <a href="#server" onClick={() => setMenuOpen(false)}>О сервере</a>
@@ -113,7 +114,12 @@ export default function Home() {
         </picture>
         <div className="hero-actions">
           <a className="primary-button hero-button" href="/account#register"><span>Начать путь</span></a>
-          <p><b>3.1.1</b><i />160 РБ<i />2 расы<i />12 классов</p>
+          <dl className="hero-passport" aria-label="Основные параметры сервера">
+            <div><dt>Версия</dt><dd>3.1.1</dd></div>
+            <div><dt>Предел</dt><dd>160 РБ</dd></div>
+            <div><dt>Расы</dt><dd>2</dd></div>
+            <div><dt>Классы</dt><dd>12</dd></div>
+          </dl>
         </div>
         <div className="hero-cloud" aria-hidden="true" />
       </section>
@@ -240,7 +246,7 @@ export default function Home() {
         </section>
 
         <footer>
-          <a className="round-logo" href="#top" aria-label="Jade Dynasty — наверх"><span>JD</span></a>
+          <a className="round-logo" href="#top" aria-label="Jade Dynasty — наверх"><ProjectMark /></a>
           <nav aria-label="Навигация в подвале"><a href="#about">Об игре</a><a href="#server">О сервере</a><a href="#classes">Классы</a><a href="#events">События</a></nav>
           <p>Jade Dynasty · версия 3.1.1</p>
         </footer>

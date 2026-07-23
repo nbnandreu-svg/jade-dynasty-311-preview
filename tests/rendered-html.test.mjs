@@ -22,6 +22,9 @@ test("renders the production landing structure and real actions", async () => {
   assert.match(html, /class="skip-link" href="#content"/);
   assert.match(html, /class="cabinet-button" href="\/account"/);
   assert.match(html, /class="primary-button hero-button" href="\/account#register"/);
+  assert.match(html, /class="hero-passport"/);
+  assert.equal((html.match(/class="project-mark-petal /g) ?? []).length, 6);
+  assert.doesNotMatch(html, />JD</);
   assert.match(html, /hero-clean-desktop\.avif/);
   assert.doesNotMatch(html, /hero-selected-reference/);
 

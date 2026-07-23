@@ -28,8 +28,16 @@ img { display: block; max-width: 100%; }
 .eyebrow { margin: 0 0 10px; color: var(--orange-dark); font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 
 .topbar { position: relative; z-index: 30; min-height: 72px; display: grid; grid-template-columns: 180px 1fr 180px; align-items: center; padding: 0 clamp(22px, 4vw, 72px); border-bottom: 1px solid rgba(159,112,55,.27); background: rgba(255,249,236,.97); }
-.round-logo { width: 43px; height: 43px; display: grid; place-items: center; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold); font-family: var(--serif); font-size: 12px; box-shadow: inset 0 0 0 4px rgba(190,134,65,.08); }
-.round-logo span { transform: rotate(-4deg); }
+.round-logo { position: relative; width: 46px; height: 46px; display: grid; place-items: center; border: 1px solid rgba(190,134,65,.88); border-radius: 50%; color: var(--ink); background: radial-gradient(circle at 42% 34%, #fffdf5 0 26%, #f7e8c9 74%, #e8c78c 100%); box-shadow: inset 0 0 0 4px rgba(255,252,240,.7), 0 4px 12px rgba(93,59,22,.12); transition: transform .2s ease, box-shadow .2s ease; }
+.round-logo::before { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(190,134,65,.36); border-radius: inherit; }
+.round-logo::after { content: ""; position: absolute; right: 1px; bottom: 4px; width: 5px; height: 5px; border: 1px solid var(--gold); background: var(--paper-bright); transform: rotate(45deg); }
+.round-logo:hover { transform: rotate(-4deg) scale(1.04); box-shadow: inset 0 0 0 4px rgba(255,252,240,.82), 0 6px 16px rgba(93,59,22,.16); }
+.project-mark { position: relative; z-index: 1; width: 29px; height: 29px; display: block; transform: rotate(-9deg); }
+.project-mark-petal { position: absolute; top: 2px; left: 10px; width: 9px; height: 16px; border: 2.5px solid currentColor; border-bottom-color: transparent; border-left-color: transparent; border-radius: 70% 85% 58% 76%; transform-origin: 50% 12.5px; }
+.project-mark-petal-one { transform: rotate(0deg); }
+.project-mark-petal-two { transform: rotate(120deg); }
+.project-mark-petal-three { transform: rotate(240deg); }
+.project-mark-core { position: absolute; top: 11px; left: 11px; width: 7px; height: 7px; border: 1.5px solid var(--gold); border-radius: 50%; background: var(--paper-bright); box-shadow: inset 0 0 0 1.5px currentColor; }
 .topnav { display: flex; align-items: center; justify-content: center; gap: clamp(24px, 3.2vw, 58px); }
 .topnav a { position: relative; padding: 27px 0 23px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .topnav a::after { content: ""; position: absolute; left: 50%; right: 50%; bottom: 16px; height: 2px; background: var(--orange); transition: left .18s ease, right .18s ease; }
@@ -50,8 +58,11 @@ img { display: block; max-width: 100%; }
 .primary-button::after { right: 17px; }
 .primary-button:hover { filter: brightness(1.09); transform: translateY(-2px); }
 .hero-button { min-width: 300px; min-height: 62px; font-size: 21px; }
-.hero-actions p { display: flex; align-items: center; gap: 10px; margin: 0; padding: 6px 14px; color: var(--ink-deep); background: rgba(255,248,230,.72); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; backdrop-filter: blur(4px); }
-.hero-actions i { width: 3px; height: 3px; transform: rotate(45deg); background: var(--gold); }
+.hero-passport { display: grid; grid-template-columns: repeat(4, minmax(66px, 1fr)); gap: 7px; margin: 0; color: var(--ink-deep); }
+.hero-passport > div { position: relative; min-width: 0; display: grid; justify-items: center; padding: 7px 9px 8px; border: 1px solid rgba(190,134,65,.68); background: linear-gradient(180deg, rgba(255,252,241,.92), rgba(246,229,194,.84)); box-shadow: inset 0 0 0 2px rgba(255,255,255,.5), 0 5px 13px rgba(92,60,27,.11); clip-path: polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px); backdrop-filter: blur(4px); }
+.hero-passport > div::before { content: ""; position: absolute; top: -2px; left: 50%; width: 5px; height: 5px; border: 1px solid var(--gold); background: #fff9e8; transform: translateX(-50%) rotate(45deg); }
+.hero-passport dt { color: #6d705f; font-size: 8px; font-weight: 700; letter-spacing: .1em; line-height: 1; text-transform: uppercase; }
+.hero-passport dd { margin: 3px 0 0; font-family: var(--serif); font-size: 14px; font-weight: 700; letter-spacing: .035em; line-height: 1; white-space: nowrap; }
 .hero-cloud { position: absolute; z-index: 3; right: -4%; bottom: -42px; left: -4%; height: 98px; border-radius: 50% 50% 0 0; background: var(--paper); filter: drop-shadow(0 -8px 14px rgba(124,83,31,.05)); }
 
 .parchment { position: relative; background-color: var(--paper); background-image: radial-gradient(circle at 15% 5%, rgba(255,255,255,.75), transparent 28%), repeating-linear-gradient(0deg, rgba(157,112,53,.018) 0, rgba(157,112,53,.018) 1px, transparent 1px, transparent 4px); }
@@ -251,14 +262,18 @@ footer p { margin: 0; font-family: var(--serif); font-size: 11px; }
 @media (max-width: 760px) {
   .section-wrap { width: min(100% - 28px, 620px); }
   .topbar { padding-inline: 12px; }
-  .round-logo { width: 39px; height: 39px; }
+  .round-logo { width: 40px; height: 40px; }
+  .project-mark { transform: rotate(-9deg) scale(.87); }
   .cabinet-button { min-width: 142px; min-height: 36px; padding: 7px 12px; font-size: 9px; }
   .hero { min-height: 570px; aspect-ratio: auto; }
   .hero-media img { object-position: center top; }
   .hero::after { height: 46%; background: linear-gradient(transparent, rgba(255,244,217,.45)); }
   .hero-actions { top: auto; right: 14px; bottom: 62px; left: 14px; transform: none; }
   .hero-button { width: min(300px,100%); min-width: 0; min-height: 54px; font-size: 17px; }
-  .hero-actions p { gap: 7px; font-size: 9px; }
+  .hero-passport { width: min(328px,100%); grid-template-columns: repeat(4, minmax(0,1fr)); gap: 5px; }
+  .hero-passport > div { padding: 6px 5px 7px; }
+  .hero-passport dt { font-size: 7px; }
+  .hero-passport dd { font-size: 12px; }
   .hero-cloud { bottom: -49px; height: 85px; }
   .adventures { padding-top: 45px; }
   .section-heading { gap: 7px; font-size: 21px; letter-spacing: .07em; }
@@ -315,7 +330,8 @@ footer p { margin: 0; font-family: var(--serif); font-size: 11px; }
   .cabinet-button { min-width: 124px; font-size: 8px; }
   .menu-button { width: 40px; height: 40px; margin-left: 6px; }
   .hero { min-height: 535px; }
-  .hero-actions p { padding-inline: 8px; }
+  .hero-passport { gap: 4px; }
+  .hero-passport > div { padding-inline: 3px; }
   .adventure-card { padding-bottom: 23px; }
   .adventure-card strong { right: -3px; left: -3px; padding-inline: 6px; }
   .radar { transform: scale(.92); transform-origin: center; }
