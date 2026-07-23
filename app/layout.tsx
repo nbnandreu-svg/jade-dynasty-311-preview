@@ -24,6 +24,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Версия 3.1.1, 160 РБ, две расы и 12 классов.",
       images: [imageUrl],
     },
+    icons: {
+      icon: "/favicon.svg",
+    },
   };
 }
 
