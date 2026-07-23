@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readdir, stat } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import test from "node:test";
 
 async function render(pathname = "/") {
@@ -72,8 +72,11 @@ test("ships complete responsive hero, adventure and class assets", async () => {
   const adventureNames = ["01-sky-travel", "02-trade-craft", "03-epic-battles", "04-world-exploration", "05-festivals-events"];
   for (const name of adventureNames) {
     for (const format of ["png", "avif", "webp"]) {
-      assert.ok((await stat(new URL(`adventures/${name}.${format}`, publicRoot))).size > 1_000);
+      assert.ok((await stat(new URL(`adventures/${name}.${format}`, publicRoot))).size > 100_000);
     }
+    const png = await readFile(new URL(`adventures/${name}.png`, publicRoot));
+    assert.equal(png.readUInt32BE(16), 1200, `${name} should be 1200 px wide`);
+    assert.equal(png.readUInt32BE(20), 1000, `${name} should be 1000 px high`);
   }
 
   const classNames = ["arden", "vim", "titan", "skaya", "hakkan", "voida", "aine", "umbra", "tayo", "vailin", "morto", "niru"];

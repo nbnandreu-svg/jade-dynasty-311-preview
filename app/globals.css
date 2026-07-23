@@ -70,7 +70,7 @@ img { display: block; max-width: 100%; }
 .adventure-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(14px, 2.6vw, 42px); }
 .adventure-card { position: relative; min-width: 0; display: grid; justify-items: center; padding: 0 0 26px; background: transparent; transition: transform .18s ease; }
 .adventure-card:hover { transform: translateY(-5px); }
-.adventure-card picture { width: 100%; aspect-ratio: 1 / .83; display: block; overflow: hidden; border: 1px solid rgba(190,134,65,.72); border-radius: 50% 50% 7px 7px / 36% 36% 7px 7px; background: #dce8df; box-shadow: inset 0 0 0 4px rgba(255,251,241,.58), 0 8px 18px rgba(93,63,27,.08); transition: box-shadow .18s ease; }
+.adventure-card picture { width: 100%; aspect-ratio: 6 / 5; display: block; overflow: hidden; border: 1px solid rgba(190,134,65,.72); border-radius: 50% 50% 7px 7px / 36% 36% 7px 7px; background: #dce8df; box-shadow: inset 0 0 0 4px rgba(255,251,241,.58), 0 8px 18px rgba(93,63,27,.08); transition: box-shadow .18s ease; }
 .adventure-card:hover picture { box-shadow: inset 0 0 0 4px rgba(255,251,241,.58), 0 15px 25px rgba(93,63,27,.13); }
 .adventure-card img { width: 100%; height: 100%; object-fit: cover; }
 .adventure-card strong { position: absolute; right: -5px; bottom: 10px; left: -5px; min-height: 34px; display: grid; place-items: center; padding: 6px 14px; color: #fff9e9; background: var(--teal); clip-path: polygon(7% 0,93% 0,100% 50%,93% 100%,7% 100%,0 50%); font-family: var(--serif); font-size: clamp(8px, .85vw, 12px); letter-spacing: .02em; text-align: center; text-transform: uppercase; }

@@ -127,7 +127,7 @@ export default function Home() {
               <a className="adventure-card" href={item.href} key={item.image}>
                 <picture>
                   <source type="image/avif" srcSet={`/adventures/${item.image}.avif`} />
-                  <img src={`/adventures/${item.image}.webp`} alt={item.alt} width="205" height="136" loading="lazy" />
+                  <img src={`/adventures/${item.image}.webp`} alt={item.alt} width="1200" height="1000" loading="lazy" />
                 </picture>
                 <strong>{item.title}</strong>
               </a>
