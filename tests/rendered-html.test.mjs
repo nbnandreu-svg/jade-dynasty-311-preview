@@ -66,12 +66,13 @@ test("ships the compact authenticated player dashboard state", async () => {
   const source = await readFile(new URL("../app/account/page.tsx", import.meta.url), "utf8");
 
   assert.match(source, /get\("view"\) === "player"/);
-  for (const label of ["Обзор", "Игровой аккаунт", "Безопасность", "Поддержка"]) {
+  for (const label of ["Обзор", "Игровой аккаунт", "Пополнить счёт", "Безопасность", "Поддержка"]) {
     assert.match(source, new RegExp(label));
   }
   for (const copy of [
     "Серверные данные и операции не имитируются",
     "Персонажей пока нет",
+    "Платёжный провайдер, валюта, комиссии и правила начисления ещё не утверждены",
     "Активировать промокод",
     "данные недоступны",
   ]) {

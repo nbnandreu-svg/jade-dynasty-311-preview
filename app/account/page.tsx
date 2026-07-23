@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ProjectMark } from "../ProjectMark";
 import { withBasePath } from "../sitePaths";
 
-type PlayerSection = "overview" | "game-account" | "security" | "support" | "promo";
+type PlayerSection = "overview" | "game-account" | "top-up" | "security" | "support" | "promo";
 
 const classNames: Record<string, string> = {
   arden: "Арден",
@@ -45,8 +45,9 @@ function getAccountView() {
 const playerNavItems: Array<{ id: Exclude<PlayerSection, "promo">; label: string; index: string }> = [
   { id: "overview", label: "Обзор", index: "01" },
   { id: "game-account", label: "Игровой аккаунт", index: "02" },
-  { id: "security", label: "Безопасность", index: "03" },
-  { id: "support", label: "Поддержка", index: "04" },
+  { id: "top-up", label: "Пополнить счёт", index: "03" },
+  { id: "security", label: "Безопасность", index: "04" },
+  { id: "support", label: "Поддержка", index: "05" },
 ];
 
 function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
@@ -162,6 +163,12 @@ function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
                   <p>Создание будет доступно после согласования backend-контракта.</p>
                 </article>
                 <article>
+                  <span>Баланс</span>
+                  <strong>Данные недоступны</strong>
+                  <p>Сумма появится после подключения платёжного и игрового API.</p>
+                  <button type="button" onClick={() => openSection("top-up")}>Пополнить счёт</button>
+                </article>
+                <article>
                   <span>Защита профиля</span>
                   <strong>Данные недоступны</strong>
                   <p>Подтверждение почты и сессии появятся вместе с авторизацией.</p>
@@ -195,6 +202,9 @@ function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
                   </div>
                   <button type="button" onClick={() => openSection("game-account")}>
                     <span>Игровой аккаунт</span><b aria-hidden="true">→</b>
+                  </button>
+                  <button type="button" onClick={() => openSection("top-up")}>
+                    <span>Пополнить счёт</span><b aria-hidden="true">→</b>
                   </button>
                   <button type="button" onClick={() => openSection("security")}>
                     <span>Изменить пароль</span><b aria-hidden="true">→</b>
@@ -242,6 +252,86 @@ function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
                 <article><b>02</b><strong>Создать игровой аккаунт</strong><p>Отдельные данные для входа через клиент.</p></article>
                 <article><b>03</b><strong>Увидеть персонажей</strong><p>Только фактические данные игрового сервера.</p></article>
               </div>
+            </section>
+          )}
+
+          {activeSection === "top-up" && (
+            <section className="player-detail-section" aria-labelledby="top-up-title">
+              <div className="player-page-heading">
+                <span>Баланс аккаунта</span>
+                <h1 id="top-up-title">Пополнить счёт</h1>
+                <p>Платёжный провайдер, валюта, комиссии и правила начисления ещё не утверждены. Интерфейс показывает будущий сценарий, но не принимает оплату.</p>
+              </div>
+
+              <div className="player-payment-grid">
+                <article className="player-panel player-payment-form">
+                  <div className="player-panel-heading">
+                    <div>
+                      <span>Шаг 1</span>
+                      <h2>Укажите сумму</h2>
+                    </div>
+                  </div>
+                  <form onSubmit={(event) => {
+                    event.preventDefault();
+                    showBackendNotice("Переход к оплате");
+                  }}>
+                    <label htmlFor="top-up-amount">Сумма пополнения</label>
+                    <input
+                      id="top-up-amount"
+                      name="topUpAmount"
+                      type="number"
+                      min="1"
+                      step="1"
+                      inputMode="decimal"
+                      placeholder="Введите сумму"
+                      required
+                    />
+
+                    <div className="player-payment-unavailable">
+                      <span>Валюта</span>
+                      <strong>Будет определена</strong>
+                    </div>
+                    <div className="player-payment-unavailable">
+                      <span>Способ оплаты</span>
+                      <strong>Провайдер не подключён</strong>
+                    </div>
+
+                    <button type="submit">Продолжить</button>
+                  </form>
+                </article>
+
+                <aside className="player-panel player-payment-summary" aria-labelledby="payment-summary-title">
+                  <div className="player-panel-heading">
+                    <div>
+                      <span>Шаг 2</span>
+                      <h2 id="payment-summary-title">Итог</h2>
+                    </div>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>К зачислению</dt>
+                      <dd>Рассчитается после подключения</dd>
+                    </div>
+                    <div>
+                      <dt>Комиссия</dt>
+                      <dd>Не определена</dd>
+                    </div>
+                    <div>
+                      <dt>Платёжный сервис</dt>
+                      <dd>Не выбран</dd>
+                    </div>
+                  </dl>
+                  <p>В демо не запрашиваются реквизиты карты и не создаётся платёж.</p>
+                </aside>
+              </div>
+
+              <article className="player-payment-safety">
+                <b aria-hidden="true">!</b>
+                <div>
+                  <strong>До подключения оплаты</strong>
+                  <p>Нужно утвердить валюту, внутренний баланс, бонусы, возвраты, юридические документы и платёжного провайдера.</p>
+                </div>
+              </article>
             </section>
           )}
 
