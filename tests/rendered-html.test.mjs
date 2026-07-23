@@ -78,6 +78,9 @@ test("ships the compact authenticated player dashboard state", async () => {
   ]) {
     assert.match(source, new RegExp(copy, "i"));
   }
+  assert.doesNotMatch(source, /index:\s*"0\d"/);
+  assert.doesNotMatch(source, />0[1-9]</);
+  assert.doesNotMatch(source, /Шаг\s+\d/i);
   assert.doesNotMatch(source, /Магазин|Рейтинг|Реферал/i);
 });
 

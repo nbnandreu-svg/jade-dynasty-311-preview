@@ -42,12 +42,12 @@ function getAccountView() {
     : "auth";
 }
 
-const playerNavItems: Array<{ id: Exclude<PlayerSection, "promo">; label: string; index: string }> = [
-  { id: "overview", label: "Обзор", index: "01" },
-  { id: "game-account", label: "Игровой аккаунт", index: "02" },
-  { id: "top-up", label: "Пополнить счёт", index: "03" },
-  { id: "security", label: "Безопасность", index: "04" },
-  { id: "support", label: "Поддержка", index: "05" },
+const playerNavItems: Array<{ id: Exclude<PlayerSection, "promo">; label: string }> = [
+  { id: "overview", label: "Обзор" },
+  { id: "game-account", label: "Игровой аккаунт" },
+  { id: "top-up", label: "Пополнить счёт" },
+  { id: "security", label: "Безопасность" },
+  { id: "support", label: "Поддержка" },
 ];
 
 function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
@@ -96,7 +96,6 @@ function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
               aria-current={activeSection === item.id ? "page" : undefined}
               onClick={() => openSection(item.id)}
             >
-              <span aria-hidden="true">{item.index}</span>
               {item.label}
             </button>
           ))}
@@ -248,9 +247,9 @@ function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
                 </div>
               </article>
               <div className="player-flow-grid">
-                <article><b>01</b><strong>Создать web-профиль</strong><p>Почта и безопасный пароль для входа в ЛК.</p></article>
-                <article><b>02</b><strong>Создать игровой аккаунт</strong><p>Отдельные данные для входа через клиент.</p></article>
-                <article><b>03</b><strong>Увидеть персонажей</strong><p>Только фактические данные игрового сервера.</p></article>
+                <article><strong>Создать web-профиль</strong><p>Почта и безопасный пароль для входа в ЛК.</p></article>
+                <article><strong>Создать игровой аккаунт</strong><p>Отдельные данные для входа через клиент.</p></article>
+                <article><strong>Увидеть персонажей</strong><p>Только фактические данные игрового сервера.</p></article>
               </div>
             </section>
           )}
@@ -267,7 +266,7 @@ function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
                 <article className="player-panel player-payment-form">
                   <div className="player-panel-heading">
                     <div>
-                      <span>Шаг 1</span>
+                      <span>Пополнение баланса</span>
                       <h2>Укажите сумму</h2>
                     </div>
                   </div>
@@ -303,7 +302,7 @@ function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
                 <aside className="player-panel player-payment-summary" aria-labelledby="payment-summary-title">
                   <div className="player-panel-heading">
                     <div>
-                      <span>Шаг 2</span>
+                      <span>Расчёт операции</span>
                       <h2 id="payment-summary-title">Итог</h2>
                     </div>
                   </div>
