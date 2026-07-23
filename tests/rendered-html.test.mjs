@@ -62,6 +62,24 @@ test("renders the separate account and registration interface", async () => {
   assert.match(html, /данные формы никуда не отправляются/);
 });
 
+test("ships the compact authenticated player dashboard state", async () => {
+  const source = await readFile(new URL("../app/account/page.tsx", import.meta.url), "utf8");
+
+  assert.match(source, /get\("view"\) === "player"/);
+  for (const label of ["Обзор", "Игровой аккаунт", "Безопасность", "Поддержка"]) {
+    assert.match(source, new RegExp(label));
+  }
+  for (const copy of [
+    "Серверные данные и операции не имитируются",
+    "Персонажей пока нет",
+    "Активировать промокод",
+    "данные недоступны",
+  ]) {
+    assert.match(source, new RegExp(copy, "i"));
+  }
+  assert.doesNotMatch(source, /Магазин|Рейтинг|Реферал/i);
+});
+
 test("ships complete responsive hero, adventure and class assets", async () => {
   const publicRoot = new URL("../public/", import.meta.url);
 

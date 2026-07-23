@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ProjectMark } from "../ProjectMark";
 import { withBasePath } from "../sitePaths";
 
+type PlayerSection = "overview" | "game-account" | "security" | "support" | "promo";
+
 const classNames: Record<string, string> = {
   arden: "Арден",
   vim: "Вим",
@@ -22,7 +24,11 @@ const classNames: Record<string, string> = {
 
 function subscribeToLocation(callback: () => void) {
   window.addEventListener("popstate", callback);
-  return () => window.removeEventListener("popstate", callback);
+  window.addEventListener("hashchange", callback);
+  return () => {
+    window.removeEventListener("popstate", callback);
+    window.removeEventListener("hashchange", callback);
+  };
 }
 
 function getSelectedClass() {
@@ -30,9 +36,296 @@ function getSelectedClass() {
   return classNames[classSlug] ?? "";
 }
 
+function getAccountView() {
+  return new URLSearchParams(window.location.search).get("view") === "player"
+    ? "player"
+    : "auth";
+}
+
+const playerNavItems: Array<{ id: Exclude<PlayerSection, "promo">; label: string; index: string }> = [
+  { id: "overview", label: "Обзор", index: "01" },
+  { id: "game-account", label: "Игровой аккаунт", index: "02" },
+  { id: "security", label: "Безопасность", index: "03" },
+  { id: "support", label: "Поддержка", index: "04" },
+];
+
+function PlayerDashboard({ selectedClass }: { selectedClass: string }) {
+  const [activeSection, setActiveSection] = useState<PlayerSection>("overview");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [notice, setNotice] = useState("");
+
+  function openSection(section: PlayerSection) {
+    setActiveSection(section);
+    setMenuOpen(false);
+    setNotice("");
+  }
+
+  function showBackendNotice(action: string) {
+    setNotice(`${action} станет доступно после подключения защищённого API личного кабинета.`);
+  }
+
+  return (
+    <main className="player-account">
+      <button
+        className={`player-sidebar-scrim${menuOpen ? " is-open" : ""}`}
+        type="button"
+        aria-label="Закрыть меню"
+        tabIndex={menuOpen ? 0 : -1}
+        onClick={() => setMenuOpen(false)}
+      />
+
+      <aside className={`player-sidebar${menuOpen ? " is-open" : ""}`} aria-label="Навигация личного кабинета">
+        <div className="player-brand">
+          <Link className="round-logo" href="/" aria-label="Вернуться на главную">
+            <ProjectMark />
+          </Link>
+          <div>
+            <strong>Jade Dynasty</strong>
+            <span>Сервер 3.1.1</span>
+          </div>
+        </div>
+
+        <div className="player-nav-label">Аккаунт</div>
+        <nav className="player-nav">
+          {playerNavItems.map((item) => (
+            <button
+              key={item.id}
+              className={activeSection === item.id ? "is-active" : ""}
+              type="button"
+              aria-current={activeSection === item.id ? "page" : undefined}
+              onClick={() => openSection(item.id)}
+            >
+              <span aria-hidden="true">{item.index}</span>
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="player-sidebar-footer">
+          <Link href="/">← На сайт</Link>
+          <Link href="/account">Выйти из демо</Link>
+        </div>
+      </aside>
+
+      <section className="player-workspace">
+        <header className="player-topbar">
+          <button
+            className="player-menu-button"
+            type="button"
+            aria-label="Открыть меню личного кабинета"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((value) => !value)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+          <div>
+            <span>Личный кабинет</span>
+            <strong>Демо структуры</strong>
+          </div>
+          <Link href="/account" className="player-exit">Вход и регистрация</Link>
+        </header>
+
+        <div className="player-content">
+          <p className="player-demo-note">
+            Это интерактивный прототип авторизованной части. Серверные данные и операции не имитируются.
+          </p>
+
+          {activeSection === "overview" && (
+            <section aria-labelledby="player-overview-title">
+              <div
+                className="player-welcome"
+                style={{ "--account-banner": `url("${withBasePath("/sections/final-journey-1440.webp")}")` } as CSSProperties}
+              >
+                <div>
+                  <span>Панель игрока</span>
+                  <h1 id="player-overview-title">Добро пожаловать</h1>
+                  <p>Здесь будут собраны состояние игрового аккаунта, персонажи и защита профиля.</p>
+                  {selectedClass && (
+                    <small>
+                      С главной передан класс <strong>{selectedClass}</strong>. Окончательный выбор выполняется в игре.
+                    </small>
+                  )}
+                </div>
+              </div>
+
+              <div className="player-status-grid" aria-label="Состояние сервисов">
+                <article>
+                  <span>Сервер</span>
+                  <strong>Статус не подключён</strong>
+                  <p>Доступность появится после подключения status API.</p>
+                </article>
+                <article>
+                  <span>Игровой аккаунт</span>
+                  <strong>Ещё не создан</strong>
+                  <p>Создание будет доступно после согласования backend-контракта.</p>
+                </article>
+                <article>
+                  <span>Защита профиля</span>
+                  <strong>Данные недоступны</strong>
+                  <p>Подтверждение почты и сессии появятся вместе с авторизацией.</p>
+                </article>
+              </div>
+
+              <div className="player-overview-grid">
+                <article className="player-panel player-characters">
+                  <div className="player-panel-heading">
+                    <div>
+                      <span>Игровые данные</span>
+                      <h2>Мои персонажи</h2>
+                    </div>
+                  </div>
+                  <div className="player-empty-state">
+                    <b aria-hidden="true">◇</b>
+                    <strong>Персонажей пока нет</strong>
+                    <p>Они появятся здесь после создания игрового аккаунта и подключения game API.</p>
+                    <button type="button" onClick={() => openSection("game-account")}>
+                      Перейти к аккаунту
+                    </button>
+                  </div>
+                </article>
+
+                <aside className="player-panel player-quick-actions" aria-labelledby="quick-actions-title">
+                  <div className="player-panel-heading">
+                    <div>
+                      <span>Без лишних переходов</span>
+                      <h2 id="quick-actions-title">Быстрые действия</h2>
+                    </div>
+                  </div>
+                  <button type="button" onClick={() => openSection("game-account")}>
+                    <span>Игровой аккаунт</span><b aria-hidden="true">→</b>
+                  </button>
+                  <button type="button" onClick={() => openSection("security")}>
+                    <span>Изменить пароль</span><b aria-hidden="true">→</b>
+                  </button>
+                  <button type="button" onClick={() => openSection("promo")}>
+                    <span>Активировать промокод</span><b aria-hidden="true">→</b>
+                  </button>
+                  <button type="button" onClick={() => openSection("support")}>
+                    <span>Обратиться в поддержку</span><b aria-hidden="true">→</b>
+                  </button>
+                </aside>
+              </div>
+
+              <article className="player-security-strip">
+                <div className="player-security-mark" aria-hidden="true">✓</div>
+                <div>
+                  <span>Безопасность аккаунта</span>
+                  <strong>Настройки появятся после подключения авторизации</strong>
+                  <p>Пароль, подтверждение почты и активные сессии будут собраны в одном разделе.</p>
+                </div>
+                <button type="button" onClick={() => openSection("security")}>Открыть</button>
+              </article>
+            </section>
+          )}
+
+          {activeSection === "game-account" && (
+            <section className="player-detail-section" aria-labelledby="game-account-title">
+              <div className="player-page-heading">
+                <span>Связь с игрой</span>
+                <h1 id="game-account-title">Игровой аккаунт</h1>
+                <p>Web-профиль и учётная запись игрового сервера будут разделены, чтобы игрок понимал, какими данными он управляет.</p>
+              </div>
+              <article className="player-panel player-account-empty">
+                <div className="player-empty-state">
+                  <b aria-hidden="true">◇</b>
+                  <strong>Игровой аккаунт не подключён</strong>
+                  <p>Имя, дата создания и последний вход появятся только после ответа игрового API.</p>
+                  <button type="button" onClick={() => showBackendNotice("Создание игрового аккаунта")}>
+                    Создать игровой аккаунт
+                  </button>
+                </div>
+              </article>
+              <div className="player-flow-grid">
+                <article><b>01</b><strong>Создать web-профиль</strong><p>Почта и безопасный пароль для входа в ЛК.</p></article>
+                <article><b>02</b><strong>Создать игровой аккаунт</strong><p>Отдельные данные для входа через клиент.</p></article>
+                <article><b>03</b><strong>Увидеть персонажей</strong><p>Только фактические данные игрового сервера.</p></article>
+              </div>
+            </section>
+          )}
+
+          {activeSection === "security" && (
+            <section className="player-detail-section" aria-labelledby="security-title">
+              <div className="player-page-heading">
+                <span>Защита профиля</span>
+                <h1 id="security-title">Безопасность</h1>
+                <p>Критичные операции будут требовать повторного подтверждения личности и не станут выполняться только на клиенте.</p>
+              </div>
+              <div className="player-settings-list">
+                {[
+                  ["Электронная почта", "Состояние появится после подключения авторизации"],
+                  ["Пароль", "Изменение с повторной аутентификацией"],
+                  ["Двухфакторная защита", "Будет добавлена только при поддержке backend"],
+                  ["Активные сессии", "Устройства и завершение всех сессий"],
+                ].map(([title, description]) => (
+                  <article key={title}>
+                    <div><strong>{title}</strong><p>{description}</p></div>
+                    <button type="button" onClick={() => showBackendNotice(title)}>Настроить</button>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {activeSection === "promo" && (
+            <section className="player-detail-section" aria-labelledby="promo-title">
+              <div className="player-page-heading">
+                <span>Быстрое действие</span>
+                <h1 id="promo-title">Промокод</h1>
+                <p>Код можно будет активировать здесь, а результат доставки награды будет показан отдельно.</p>
+              </div>
+              <article className="player-panel player-promo-panel">
+                <form onSubmit={(event) => {
+                  event.preventDefault();
+                  showBackendNotice("Активация промокода");
+                }}>
+                  <label htmlFor="promo-code">Промокод</label>
+                  <div>
+                    <input id="promo-code" name="promoCode" placeholder="Введите код" autoComplete="off" required />
+                    <button type="submit">Активировать</button>
+                  </div>
+                </form>
+                <p>В демо код не проверяется и не отправляется.</p>
+              </article>
+            </section>
+          )}
+
+          {activeSection === "support" && (
+            <section className="player-detail-section" aria-labelledby="support-title">
+              <div className="player-page-heading">
+                <span>Помощь игроку</span>
+                <h1 id="support-title">Поддержка</h1>
+                <p>До появления собственной тикет-системы здесь будет указан только подтверждённый официальный канал связи.</p>
+              </div>
+              <article className="player-panel player-support-panel">
+                <div className="player-empty-state">
+                  <b aria-hidden="true">?</b>
+                  <strong>Канал поддержки ещё не указан</strong>
+                  <p>Мы не создаём фиктивную форму: сообщение должно уходить в реальную систему и получать номер обращения.</p>
+                  <button type="button" onClick={() => showBackendNotice("Обращение в поддержку")}>
+                    Проверить доступность
+                  </button>
+                </div>
+              </article>
+            </section>
+          )}
+
+          {notice && <p className="player-live-notice" role="status" aria-live="polite">{notice}</p>}
+        </div>
+      </section>
+    </main>
+  );
+}
+
 export default function AccountPage() {
   const [notice, setNotice] = useState("");
   const selectedClass = useSyncExternalStore(subscribeToLocation, getSelectedClass, () => "");
+  const accountView = useSyncExternalStore(subscribeToLocation, getAccountView, () => "auth");
+
+  if (accountView === "player") {
+    return <PlayerDashboard selectedClass={selectedClass} />;
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>, action: "login" | "register") {
     event.preventDefault();
