@@ -126,8 +126,8 @@ export default function Home() {
             {adventureItems.map((item) => (
               <a className="adventure-card" href={item.href} key={item.image}>
                 <picture>
-                  <source type="image/avif" srcSet={`/adventures/${item.image}.avif`} />
-                  <img src={`/adventures/${item.image}.webp`} alt={item.alt} width="1200" height="1000" loading="lazy" />
+                  <source type="image/avif" srcSet={`/adventures/${item.image}.avif?v=hires-1`} />
+                  <img src={`/adventures/${item.image}.webp?v=hires-1`} alt={item.alt} width="1200" height="1000" loading="lazy" />
                 </picture>
                 <strong>{item.title}</strong>
               </a>
