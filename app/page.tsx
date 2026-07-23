@@ -1,7 +1,9 @@
 "use client";
 
-import { type CSSProperties, type KeyboardEvent, type TouchEvent, useMemo, useState } from "react";
+import Link from "next/link";
+import { type CSSProperties, type KeyboardEvent, type TouchEvent, useEffect, useMemo, useState } from "react";
 import { ProjectMark } from "./ProjectMark";
+import { withBasePath } from "./sitePaths";
 
 type ClassItem = {
   name: string;
@@ -58,12 +60,52 @@ export default function Home() {
   const previousClass = classItems[(classIndex - 1 + classItems.length) % classItems.length];
   const nextClass = classItems[(classIndex + 1) % classItems.length];
 
+  useEffect(() => {
+    let cancelled = false;
+    const preload = () => {
+      classItems.forEach((item) => {
+        if (cancelled) return;
+        const image = new Image();
+        image.src = withBasePath(`/classes/${item.slug}-640.avif`);
+        image.decode().catch(() => undefined);
+      });
+    };
+
+    const idleWindow = window as typeof window & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const idleHandle = idleWindow.requestIdleCallback?.(preload, { timeout: 900 });
+    const timerHandle = idleHandle === undefined ? window.setTimeout(preload, 120) : undefined;
+
+    return () => {
+      cancelled = true;
+      if (idleHandle !== undefined) idleWindow.cancelIdleCallback?.(idleHandle);
+      if (timerHandle !== undefined) window.clearTimeout(timerHandle);
+    };
+  }, []);
+
+  function updateClass(nextIndex: number) {
+    const normalizedIndex = (nextIndex + classItems.length) % classItems.length;
+    const update = () => setClassIndex(normalizedIndex);
+    const motionDisabled = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const transitionDocument = document as Document & {
+      startViewTransition?: (callback: () => void) => void;
+    };
+
+    if (!motionDisabled && transitionDocument.startViewTransition) {
+      transitionDocument.startViewTransition(update);
+      return;
+    }
+    update();
+  }
+
   function changeClass(direction: number) {
-    setClassIndex((index) => (index + direction + classItems.length) % classItems.length);
+    updateClass(classIndex + direction);
   }
 
   function selectClass(index: number) {
-    setClassIndex(index);
+    if (index !== classIndex) updateClass(index);
   }
 
   function handleClassKeys(event: KeyboardEvent<HTMLElement>) {
@@ -97,7 +139,7 @@ export default function Home() {
           <a href="#events" onClick={() => setMenuOpen(false)}>События</a>
           <a href="#start" onClick={() => setMenuOpen(false)}>Начать</a>
         </nav>
-        <a className="cabinet-button" href="/account">Личный кабинет</a>
+        <Link className="cabinet-button" href="/account">Личный кабинет</Link>
         <button className="menu-button" type="button" aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
           <span /><span /><span />
         </button>
@@ -105,15 +147,15 @@ export default function Home() {
 
       <section className="hero" id="top" aria-label="Jade Dynasty — Навстречу небесам">
         <picture className="hero-media">
-          <source media="(max-width: 640px)" type="image/avif" srcSet="/hero/hero-clean-mobile.avif" />
-          <source media="(max-width: 640px)" type="image/webp" srcSet="/hero/hero-clean-mobile.webp" />
-          <source media="(max-width: 1100px)" type="image/avif" srcSet="/hero/hero-clean-tablet.avif" />
-          <source media="(max-width: 1100px)" type="image/webp" srcSet="/hero/hero-clean-tablet.webp" />
-          <source type="image/avif" srcSet="/hero/hero-clean-desktop.avif" />
-          <img src="/hero/hero-clean-desktop.webp" alt="Герои Jade Dynasty на фоне небесного города" width="1672" height="736" fetchPriority="high" />
+          <source media="(max-width: 640px)" type="image/avif" srcSet={withBasePath("/hero/hero-clean-mobile.avif")} />
+          <source media="(max-width: 640px)" type="image/webp" srcSet={withBasePath("/hero/hero-clean-mobile.webp")} />
+          <source media="(max-width: 1100px)" type="image/avif" srcSet={withBasePath("/hero/hero-clean-tablet.avif")} />
+          <source media="(max-width: 1100px)" type="image/webp" srcSet={withBasePath("/hero/hero-clean-tablet.webp")} />
+          <source type="image/avif" srcSet={withBasePath("/hero/hero-clean-desktop.avif")} />
+          <img src={withBasePath("/hero/hero-clean-desktop.webp")} alt="Герои Jade Dynasty на фоне небесного города" width="1672" height="736" fetchPriority="high" />
         </picture>
         <div className="hero-actions">
-          <a className="primary-button hero-button" href="/account#register"><span>Начать путь</span></a>
+          <Link className="primary-button hero-button" href="/account#register"><span>Начать путь</span></Link>
           <dl className="hero-passport" aria-label="Основные параметры сервера">
             <div><dt>Версия</dt><dd>3.1.1</dd></div>
             <div><dt>Предел</dt><dd>160 РБ</dd></div>
@@ -132,8 +174,8 @@ export default function Home() {
             {adventureItems.map((item) => (
               <a className="adventure-card" href={item.href} key={item.image}>
                 <picture>
-                  <source type="image/avif" srcSet={`/adventures/${item.image}.avif?v=hires-1`} />
-                  <img src={`/adventures/${item.image}.webp?v=hires-1`} alt={item.alt} width="1200" height="1000" loading="lazy" />
+                  <source type="image/avif" srcSet={withBasePath(`/adventures/${item.image}.avif?v=hires-1`)} />
+                  <img src={withBasePath(`/adventures/${item.image}.webp?v=hires-1`)} alt={item.alt} width="1200" height="1000" loading="lazy" />
                 </picture>
                 <strong>{item.title}</strong>
               </a>
@@ -184,7 +226,7 @@ export default function Home() {
               <button className="class-preview previous" type="button" onClick={() => changeClass(-1)} aria-label={`Предыдущий класс: ${previousClass.name}`}>
                 <ClassPicture item={previousClass} sizes="210px" />
               </button>
-              <div className="class-main-card" aria-live="polite">
+              <div className="class-main-card" key={currentClass.slug} aria-live="polite">
                 <ClassPicture item={currentClass} sizes="(max-width: 640px) 86vw, 510px" priority />
                 <strong>{currentClass.name}</strong>
               </div>
@@ -203,7 +245,7 @@ export default function Home() {
               <dl className="class-meta"><div><dt>Подойдёт</dt><dd>{currentClass.suitable}</dd></div><div><dt>Учтите</dt><dd>{currentClass.caution}</dd></div><div><dt>Оружие</dt><dd>{currentClass.weapon}</dd></div></dl>
               <RadarChart stats={currentClass.stats} />
               <small>Ориентировочная оценка стиля класса, не серверные коэффициенты.</small>
-              <a className="primary-button class-cta" href={`/account?class=${currentClass.slug}#register`}><span>Начать за {currentClass.name}</span></a>
+              <Link className="primary-button class-cta" href={`/account?class=${currentClass.slug}#register`}><span>Начать за {currentClass.name}</span></Link>
             </article>
           </div>
           <div className="class-dots" role="group" aria-label="Выбор класса">
@@ -218,8 +260,8 @@ export default function Home() {
             {eventItems.map((item) => (
               <article className="event-card" key={item.title}>
                 <picture>
-                  <source type="image/avif" srcSet={`/sections/${item.image}-640.avif 640w, /sections/${item.image}-960.avif 960w`} sizes="(max-width: 760px) 100vw, 50vw" />
-                  <img src={`/sections/${item.image}-960.webp`} alt={item.alt} width="960" height="480" loading="lazy" />
+                  <source type="image/avif" srcSet={`${withBasePath(`/sections/${item.image}-640.avif`)} 640w, ${withBasePath(`/sections/${item.image}-960.avif`)} 960w`} sizes="(max-width: 760px) 100vw, 50vw" />
+                  <img src={withBasePath(`/sections/${item.image}-960.webp`)} alt={item.alt} width="960" height="480" loading="lazy" />
                 </picture>
                 <div><span>{item.eyebrow}</span><h3>{item.title}</h3><p>{item.text}</p><button type="button" disabled>Подробнее во ВКонтакте — скоро</button></div>
               </article>
@@ -234,7 +276,7 @@ export default function Home() {
         <section className="start section-wrap" id="start" aria-labelledby="start-title">
           <SectionHeading id="start-title">Три шага к началу путешествия</SectionHeading>
           <ol>
-            <li><b>1</b><div><strong>Создайте аккаунт</strong><span>Регистрация и вход находятся в личном кабинете.</span></div><a href="/account#register">Перейти</a></li>
+            <li><b>1</b><div><strong>Создайте аккаунт</strong><span>Регистрация и вход находятся в личном кабинете.</span></div><Link href="/account#register">Перейти</Link></li>
             <li><b>2</b><div><strong>Установите лаунчер</strong><span>Ссылка появится после подготовки клиента.</span></div><em>Скоро</em></li>
             <li><b>3</b><div><strong>Войдите в игру</strong><span>Выберите класс и начните своё приключение.</span></div><em>После запуска</em></li>
           </ol>
@@ -242,7 +284,7 @@ export default function Home() {
 
         <section className="final-cta" aria-labelledby="final-title">
           <ResponsiveSectionImage name="final-journey" />
-          <div><p className="eyebrow">Jade Dynasty 3.1.1</p><h2 id="final-title">Навстречу небесам</h2><p>Выберите свой путь и подготовьте аккаунт к началу путешествия.</p><a className="primary-button" href="/account#register"><span>Создать аккаунт</span></a></div>
+          <div><p className="eyebrow">Jade Dynasty 3.1.1</p><h2 id="final-title">Навстречу небесам</h2><p>Выберите свой путь и подготовьте аккаунт к началу путешествия.</p><Link className="primary-button" href="/account#register"><span>Создать аккаунт</span></Link></div>
         </section>
 
         <footer>
@@ -262,9 +304,9 @@ function SectionHeading({ children, id }: { children: React.ReactNode; id: strin
 function ClassPicture({ item, sizes, priority = false }: { item: ClassItem; sizes: string; priority?: boolean }) {
   return (
     <picture>
-      <source type="image/avif" srcSet={`/classes/${item.slug}-320.avif 320w, /classes/${item.slug}-480.avif 480w, /classes/${item.slug}-640.avif 640w`} sizes={sizes} />
-      <source type="image/webp" srcSet={`/classes/${item.slug}-320.webp 320w, /classes/${item.slug}-480.webp 480w, /classes/${item.slug}-640.webp 640w`} sizes={sizes} />
-      <img src={`/classes/${item.slug}-640.webp`} alt={`Класс ${item.name}`} width="640" height="800" loading={priority ? "eager" : "lazy"} />
+      <source type="image/avif" srcSet={`${withBasePath(`/classes/${item.slug}-320.avif`)} 320w, ${withBasePath(`/classes/${item.slug}-480.avif`)} 480w, ${withBasePath(`/classes/${item.slug}-640.avif`)} 640w`} sizes={sizes} />
+      <source type="image/webp" srcSet={`${withBasePath(`/classes/${item.slug}-320.webp`)} 320w, ${withBasePath(`/classes/${item.slug}-480.webp`)} 480w, ${withBasePath(`/classes/${item.slug}-640.webp`)} 640w`} sizes={sizes} />
+      <img src={withBasePath(`/classes/${item.slug}-640.webp`)} alt={`Класс ${item.name}`} width="640" height="800" loading={priority ? "eager" : "lazy"} />
     </picture>
   );
 }
@@ -273,9 +315,9 @@ function ResponsiveSectionImage({ name }: { name: keyof typeof sectionPictures }
   const image = sectionPictures[name];
   return (
     <picture>
-      <source type="image/avif" srcSet={`/sections/${name}-640.avif 640w, /sections/${name}-960.avif 960w, /sections/${name}-1440.avif 1440w`} sizes="(max-width: 760px) 100vw, 60vw" />
-      <source type="image/webp" srcSet={`/sections/${name}-640.webp 640w, /sections/${name}-960.webp 960w, /sections/${name}-1440.webp 1440w`} sizes="(max-width: 760px) 100vw, 60vw" />
-      <img src={`/sections/${name}-960.webp`} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
+      <source type="image/avif" srcSet={`${withBasePath(`/sections/${name}-640.avif`)} 640w, ${withBasePath(`/sections/${name}-960.avif`)} 960w, ${withBasePath(`/sections/${name}-1440.avif`)} 1440w`} sizes="(max-width: 760px) 100vw, 60vw" />
+      <source type="image/webp" srcSet={`${withBasePath(`/sections/${name}-640.webp`)} 640w, ${withBasePath(`/sections/${name}-960.webp`)} 960w, ${withBasePath(`/sections/${name}-1440.webp`)} 1440w`} sizes="(max-width: 760px) 100vw, 60vw" />
+      <img src={withBasePath(`/sections/${name}-960.webp`)} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
     </picture>
   );
 }

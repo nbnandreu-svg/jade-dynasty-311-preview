@@ -1,9 +1,9 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { type CSSProperties, type FormEvent, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { ProjectMark } from "../ProjectMark";
+import { withBasePath } from "../sitePaths";
 
 const classNames: Record<string, string> = {
   arden: "Арден",
@@ -20,10 +20,19 @@ const classNames: Record<string, string> = {
   niru: "Ниру",
 };
 
+function subscribeToLocation(callback: () => void) {
+  window.addEventListener("popstate", callback);
+  return () => window.removeEventListener("popstate", callback);
+}
+
+function getSelectedClass() {
+  const classSlug = new URLSearchParams(window.location.search).get("class") ?? "";
+  return classNames[classSlug] ?? "";
+}
+
 export default function AccountPage() {
   const [notice, setNotice] = useState("");
-  const searchParams = useSearchParams();
-  const selectedClass = classNames[searchParams.get("class") ?? ""] ?? "";
+  const selectedClass = useSyncExternalStore(subscribeToLocation, getSelectedClass, () => "");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>, action: "login" | "register") {
     event.preventDefault();
@@ -42,7 +51,10 @@ export default function AccountPage() {
   }
 
   return (
-    <main className="account-page">
+    <main
+      className="account-page"
+      style={{ "--account-background": `url("${withBasePath("/sections/final-journey-1440.webp")}")` } as CSSProperties}
+    >
       <header className="account-header">
         <Link className="round-logo" href="/" aria-label="Вернуться на главную"><ProjectMark /></Link>
         <Link className="account-back" href="/">← На главную</Link>

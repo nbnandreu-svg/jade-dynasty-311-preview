@@ -20,8 +20,8 @@ test("renders the production landing structure and real actions", async () => {
 
   assert.match(html, /<title>Jade Dynasty 3\.1\.1 — Навстречу небесам<\/title>/);
   assert.match(html, /class="skip-link" href="#content"/);
-  assert.match(html, /class="cabinet-button" href="\/account"/);
-  assert.match(html, /class="primary-button hero-button" href="\/account#register"/);
+  assert.match(html, /<a[^>]*href="\/account"[^>]*class="cabinet-button"/);
+  assert.match(html, /<a[^>]*href="\/account#register"[^>]*class="primary-button hero-button"/);
   assert.match(html, /class="hero-passport"/);
   assert.equal((html.match(/class="project-mark-petal /g) ?? []).length, 6);
   assert.doesNotMatch(html, />JD</);

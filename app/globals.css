@@ -124,7 +124,7 @@ img { display: block; max-width: 100%; }
 .classes-heading > span { position: absolute; top: 4px; right: 0; color: var(--orange-dark); font-family: var(--serif); font-size: 20px; }
 .class-layout { display: grid; grid-template-columns: minmax(530px, 1.12fr) minmax(350px, .88fr); gap: clamp(40px, 5vw, 72px); margin-top: 42px; }
 .class-stage { position: relative; min-height: 680px; display: grid; grid-template-columns: 120px minmax(320px, 470px) 120px; align-items: center; justify-content: center; }
-.class-main-card { position: relative; z-index: 3; height: 650px; overflow: hidden; border: 1px solid var(--gold); clip-path: polygon(4% 0,96% 0,100% 3%,100% 97%,96% 100%,4% 100%,0 97%,0 3%); background: #cde3df; box-shadow: inset 0 0 0 6px rgba(255,248,224,.38), 0 22px 45px rgba(79,55,27,.17); }
+.class-main-card { position: relative; z-index: 3; height: 650px; overflow: hidden; border: 1px solid var(--gold); clip-path: polygon(4% 0,96% 0,100% 3%,100% 97%,96% 100%,4% 100%,0 97%,0 3%); background: #cde3df; box-shadow: inset 0 0 0 6px rgba(255,248,224,.38), 0 22px 45px rgba(79,55,27,.17); animation: class-enter .3s cubic-bezier(.22,.75,.28,1); view-transition-name: class-card; }
 .class-main-card picture, .class-main-card img { width: 100%; height: 100%; }
 .class-main-card img { object-fit: cover; }
 .class-main-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(4,55,65,.62), transparent 29%), linear-gradient(90deg, rgba(255,235,194,.15), transparent 12% 88%, rgba(255,235,194,.15)); }
@@ -138,7 +138,7 @@ img { display: block; max-width: 100%; }
 .class-arrow:hover { background: var(--orange-dark); transform: translateY(-50%) scale(1.05); }
 .class-arrow.left { left: 106px; transform: translateY(-50%); }
 .class-arrow.right { right: 106px; transform: translateY(-50%); }
-.class-details { min-height: 650px; padding: 26px 30px 25px; border: 1px solid rgba(190,134,65,.55); background: rgba(255,250,239,.7); box-shadow: inset 0 0 0 5px rgba(255,255,255,.4); animation: reveal .22s ease; }
+.class-details { min-height: 650px; padding: 26px 30px 25px; border: 1px solid rgba(190,134,65,.55); background: rgba(255,250,239,.7); box-shadow: inset 0 0 0 5px rgba(255,255,255,.4); animation: class-enter .3s cubic-bezier(.22,.75,.28,1); view-transition-name: class-details; }
 .class-race { margin: 0; color: var(--orange-dark) !important; font-size: 11px !important; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .class-details h3 { margin: 5px 0 2px; font-family: var(--serif); font-size: clamp(38px, 4vw, 57px); font-weight: 400; line-height: 1; text-transform: uppercase; }
 .class-role { color: var(--ink); font-family: var(--serif); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
@@ -209,7 +209,7 @@ footer nav { display: flex; gap: 30px; }
 footer nav a { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
 footer p { margin: 0; font-family: var(--serif); font-size: 11px; }
 
-.account-page { min-height: 100vh; color: var(--ink-deep); background: linear-gradient(90deg, rgba(248,234,208,.96) 0 43%, rgba(248,234,208,.48) 68%, rgba(248,234,208,.18)), url('/sections/final-journey-1440.webp') center / cover fixed; }
+.account-page { min-height: 100vh; color: var(--ink-deep); background: linear-gradient(90deg, rgba(248,234,208,.96) 0 43%, rgba(248,234,208,.48) 68%, rgba(248,234,208,.18)), var(--account-background) center / cover fixed; }
 .account-header { min-height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 12px clamp(20px,5vw,78px); border-bottom: 1px solid rgba(153,106,46,.3); background: rgba(255,248,233,.92); }
 .account-back { font-family: var(--serif); font-size: 12px; font-weight: 700; text-transform: uppercase; }
 .account-hero { min-height: calc(100vh - 70px); display: grid; grid-template-columns: minmax(300px,520px) minmax(360px,510px); align-items: center; gap: clamp(40px,7vw,110px); padding: 60px clamp(24px,8vw,150px); }
@@ -235,7 +235,12 @@ footer p { margin: 0; font-family: var(--serif); font-size: 11px; }
 .account-notice { margin: 20px 0 0; padding: 12px; border: 1px solid rgba(190,134,65,.5); background: rgba(247,231,198,.66); }
 
 :focus-visible { outline: 3px solid #ec733f; outline-offset: 4px; }
-@keyframes reveal { from { opacity: .5; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes class-enter { from { opacity: .7; transform: translateX(8px) scale(.995); } to { opacity: 1; transform: none; } }
+::view-transition-group(class-card), ::view-transition-group(class-details) { animation-duration: .34s; animation-timing-function: cubic-bezier(.22,.75,.28,1); }
+::view-transition-old(class-card), ::view-transition-old(class-details) { animation: .18s ease both class-fade-out; }
+::view-transition-new(class-card), ::view-transition-new(class-details) { animation: .32s cubic-bezier(.22,.75,.28,1) both class-fade-in; }
+@keyframes class-fade-out { to { opacity: 0; transform: translateX(-8px) scale(.995); } }
+@keyframes class-fade-in { from { opacity: 0; transform: translateX(10px) scale(.995); } }
 
 @media (max-width: 1100px) {
   .topbar { grid-template-columns: auto 1fr auto; min-height: 62px; padding-inline: 22px; }
