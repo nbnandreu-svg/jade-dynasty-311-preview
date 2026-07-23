@@ -38,7 +38,7 @@ img { display: block; max-width: 100%; }
 .cabinet-button:hover { filter: brightness(1.12); transform: translateY(-1px); }
 .menu-button { display: none; }
 
-.hero { position: relative; aspect-ratio: 1672 / 736; min-height: 520px; max-height: 790px; overflow: hidden; background: #e5c69a; }
+.hero { position: relative; width: 100%; aspect-ratio: 1672 / 736; min-height: 520px; max-height: 790px; overflow: hidden; background: #e5c69a; }
 .hero-media, .hero-media img { width: 100%; height: 100%; }
 .hero-media { position: absolute; inset: 0; }
 .hero-media img { object-fit: cover; object-position: center top; }
