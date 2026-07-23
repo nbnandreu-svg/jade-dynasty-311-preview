@@ -4,106 +4,107 @@ import test from "node:test";
 
 async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
+  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}-${Math.random()}`);
   const { default: worker } = await import(workerUrl.href);
-
   return worker.fetch(
-    new Request(`http://localhost${pathname}`, {
-      headers: { accept: "text/html" },
-    }),
-    {
-      ASSETS: {
-        fetch: async () => new Response("Not found", { status: 404 }),
-      },
-    },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
+    new Request(`http://localhost${pathname}`, { headers: { accept: "text/html" } }),
+    { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
+    { waitUntil() {}, passThroughOnException() {} },
   );
 }
 
-test("server-renders the approved landing-page structure", async () => {
+test("renders the production landing structure and real actions", async () => {
   const response = await render();
   assert.equal(response.status, 200);
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-
   const html = await response.text();
-  assert.match(html, /<title>Jade Dynasty 3\.1\.1/);
-  assert.match(html, /aria-label="Jade Dynasty — Навстречу небесам"/);
-  assert.match(html, /<a class="cabinet-button" href="\/account">Личный кабинет<\/a>/);
-  assert.match(html, /<a class="hero-start-button" href="\/account#register">Начать путь<\/a>/);
-  assert.match(html, />Мир приключений</);
+
+  assert.match(html, /<title>Jade Dynasty 3\.1\.1 — Навстречу небесам<\/title>/);
+  assert.match(html, /class="skip-link" href="#content"/);
+  assert.match(html, /class="cabinet-button" href="\/account"/);
+  assert.match(html, /class="primary-button hero-button" href="\/account#register"/);
+  assert.match(html, /hero-clean-desktop\.avif/);
+  assert.doesNotMatch(html, /hero-selected-reference/);
+
+  for (const heading of ["Мир приключений", "Об игре", "О сервере", "Выбери свой путь", "Ограниченные события", "Три шага к началу путешествия"]) {
+    assert.match(html, new RegExp(heading));
+  }
 
   const adventureCards = html.match(/class="adventure-card"/g) ?? [];
   assert.equal(adventureCards.length, 5);
-  assert.match(html, /<a class="adventure-card" href="#world">/);
+  const eventCards = html.match(/class="event-card"/g) ?? [];
+  assert.equal(eventCards.length, 2);
+  const selectorDots = html.match(/aria-label="Показать класс [^"]+"/g) ?? [];
+  assert.equal(selectorDots.length, 12);
 
-  for (const title of [
-    "Небесные путешествия",
-    "Торговля и ремёсла",
-    "Эпические битвы",
-    "Исследование мира",
-    "Праздники и события",
-  ]) {
-    assert.match(html, new RegExp(`>${title}<`));
-  }
+  assert.match(html, /aria-label="Показать предыдущий класс"/);
+  assert.match(html, /aria-label="Показать следующий класс"/);
+  assert.match(html, /\/account\?class=aine#register/);
+  assert.match(html, /Ориентировочная оценка стиля класса/);
+  assert.match(html, /disabled=""[^>]*>Подробнее во ВКонтакте — скоро/);
 
-  const classCards = html.match(/class="class-card"/g) ?? [];
-  assert.equal(classCards.length, 12);
-  assert.match(html, /<button class="class-card" type="button"[^>]*aria-pressed="false"/);
-  assert.doesNotMatch(html, /class="class-card"[^>]*\bhidden\b/);
-  assert.doesNotMatch(html, />Все 12 классов</);
-  assert.doesNotMatch(html, /class="class-name"[^>]*>[^<]*<strong>[^<]+<\/strong><span>/);
+  assert.doesNotMatch(html, /Legacy/i);
+  assert.doesNotMatch(html, /4\.8\.0|170 РБ|три расы/i);
   assert.doesNotMatch(html, /[\u3400-\u9fff]/u);
   assert.doesNotMatch(html, /\/_vinext\/image\?/);
 });
 
-test("server-renders the separate account and registration page", async () => {
-  const response = await render("/account#register");
+test("renders the separate account and registration interface", async () => {
+  const response = await render("/account?class=aine#register");
   assert.equal(response.status, 200);
-
   const html = await response.text();
   assert.match(html, />Личный кабинет</);
   assert.match(html, /id="login"/);
   assert.match(html, /id="register"/);
   assert.match(html, />Зарегистрироваться</);
-  assert.match(html, /API игрового сервера/);
+  assert.match(html, /данные формы никуда не отправляются/);
 });
 
-test("ships separate adventure sources in PNG and WebP", async () => {
-  const assetRoot = new URL("../public/adventures/", import.meta.url);
-  const files = (await readdir(assetRoot)).sort();
-  const expected = [
-    "01-sky-travel",
-    "02-trade-craft",
-    "03-epic-battles",
-    "04-world-exploration",
-    "05-festivals-events",
-  ].flatMap((name) => [`${name}.png`, `${name}.webp`]).sort();
+test("ships complete responsive hero, adventure and class assets", async () => {
+  const publicRoot = new URL("../public/", import.meta.url);
 
-  assert.deepEqual(files, expected);
+  for (const name of ["desktop", "tablet", "mobile"]) {
+    for (const format of ["avif", "webp"]) {
+      const file = new URL(`hero/hero-clean-${name}.${format}`, publicRoot);
+      assert.ok((await stat(file)).size > 40_000, `${file.pathname} should contain hero artwork`);
+    }
+  }
 
-  for (const file of files) {
-    const info = await stat(new URL(file, assetRoot));
-    assert.ok(info.size > 0, `${file} should not be empty`);
+  const adventureNames = ["01-sky-travel", "02-trade-craft", "03-epic-battles", "04-world-exploration", "05-festivals-events"];
+  for (const name of adventureNames) {
+    for (const format of ["png", "avif", "webp"]) {
+      assert.ok((await stat(new URL(`adventures/${name}.${format}`, publicRoot))).size > 1_000);
+    }
+  }
+
+  const classNames = ["arden", "vim", "titan", "skaya", "hakkan", "voida", "aine", "umbra", "tayo", "vailin", "morto", "niru"];
+  for (const name of classNames) {
+    for (const width of [320, 480, 640]) {
+      for (const format of ["avif", "webp"]) {
+        assert.ok((await stat(new URL(`classes/${name}-${width}.${format}`, publicRoot))).size > 10_000);
+      }
+    }
   }
 });
 
-test("ships distinct section artwork from the project handoff", async () => {
-  const assetRoot = new URL("../public/sections/", import.meta.url);
-  const files = (await readdir(assetRoot)).sort();
-  assert.deepEqual(files, [
-    "event-treasure.webp",
-    "gameplay-arena.webp",
-    "news-airship.webp",
-    "server-world.webp",
-    "start-path.webp",
-    "world-overview.webp",
-  ]);
+test("ships distinct section artwork and a bespoke social preview", async () => {
+  const publicRoot = new URL("../public/", import.meta.url);
+  const sectionNames = ["about-game", "event-festival", "event-skies", "final-journey", "value-world"];
+  const sizes = new Set();
 
-  for (const file of files) {
-    const info = await stat(new URL(file, assetRoot));
-    assert.ok(info.size > 100_000, `${file} should contain production artwork`);
+  for (const name of sectionNames) {
+    for (const width of [640, 960, 1440]) {
+      for (const format of ["avif", "webp"]) {
+        const info = await stat(new URL(`sections/${name}-${width}.${format}`, publicRoot));
+        assert.ok(info.size > 20_000);
+        if (width === 960 && format === "webp") sizes.add(info.size);
+      }
+    }
   }
+  assert.equal(sizes.size, sectionNames.length, "section artwork should not reuse one mock image");
+  assert.ok((await stat(new URL("og.png", publicRoot))).size > 100_000);
+});
+
+test("adventure directory contains only supported production formats", async () => {
+  const files = await readdir(new URL("../public/adventures/", import.meta.url));
+  assert.ok(files.every((file) => /\.(png|webp|avif)$/.test(file)));
 });

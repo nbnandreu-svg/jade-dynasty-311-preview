@@ -2,9 +2,27 @@
 
 import { type FormEvent, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
+const classNames: Record<string, string> = {
+  arden: "Арден",
+  vim: "Вим",
+  titan: "Титан",
+  skaya: "Ская",
+  hakkan: "Хаккан",
+  voida: "Войда",
+  aine: "Айне",
+  umbra: "Умбра",
+  tayo: "Тайо",
+  vailin: "Вайлин",
+  morto: "Морто",
+  niru: "Ниру",
+};
 
 export default function AccountPage() {
   const [notice, setNotice] = useState("");
+  const searchParams = useSearchParams();
+  const selectedClass = classNames[searchParams.get("class") ?? ""] ?? "";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>, action: "login" | "register") {
     event.preventDefault();
@@ -34,6 +52,7 @@ export default function AccountPage() {
           <span>Jade Dynasty 3.1.1</span>
           <h1 id="account-title">Личный кабинет</h1>
           <p>Создайте аккаунт, чтобы подготовиться к путешествию по небесным землям.</p>
+          {selectedClass && <p className="account-selected-class">Выбранный класс: <strong>{selectedClass}</strong>. Вы сможете подтвердить выбор уже в игре.</p>}
         </div>
 
         <div className="account-auth">
